@@ -44,6 +44,19 @@ nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:v
 .tabrow::-webkit-scrollbar{display:none}
 .tab{flex:1 0 auto;border:0;background:transparent;color:var(--muted);font:500 14px var(--f-body);padding:9px 12px;border-radius:9px;cursor:pointer;display:flex;align-items:center;gap:6px;justify-content:center;white-space:nowrap;min-height:38px}
 .tab[aria-selected="true"]{background:var(--surface);color:var(--accent-hi);box-shadow:inset 0 0 0 1px rgba(156,108,56,.35),var(--shadow)}
+/* abas escuras com a aba ativa dourada */
+.tabrow{background:#2A2A2C;border-color:#46464A;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.tabrow .tab{color:#F1EEEA}
+.tabrow .tab:hover{color:#fff}
+.tabrow .tab[aria-selected="true"]{background:var(--gold);color:#1A140E;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+/* Meu treino escuro */
+.card.treino{background:#2A2A2C;border-color:#46464A;color:#F1EEEA}
+.card.treino h3{color:#F1EEEA}
+.card.treino .stat{background:#38383B}
+.card.treino .eyebrow,.card.treino .meta{color:#C9C3BC}
+.card.treino .saldo{color:#E5BF94}
+.card.treino .pill.p-acc{background:var(--gold);color:#1A140E}
+.card.treino .pill.p-neutral{background:#38383B;color:#C9C3BC}
 .badge{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--bad);color:var(--surface);font-size:12px;display:inline-grid;place-items:center;font-variant-numeric:tabular-nums}
 section.view{display:grid;gap:16px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px;display:grid;gap:10px;min-width:0}
@@ -74,6 +87,7 @@ button:focus-visible,.btn:focus-visible,input:focus-visible,select:focus-visible
 button:disabled{opacity:.5;cursor:not-allowed}
 label{display:grid;gap:4px;font-size:13px;color:var(--muted);font-weight:500}
 input,select{font:15px var(--f-body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 10px;min-height:40px;width:100%;min-width:0}
+input[type=date]{-webkit-appearance:none;appearance:none;display:block;max-width:100%;min-height:40px}
 .formgrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
 .days{display:flex;gap:6px;flex-wrap:wrap}
 .days label{display:inline-flex;flex-direction:row;align-items:center;gap:4px;background:var(--sunk);padding:6px 10px;border-radius:8px;color:var(--ink);cursor:pointer}
@@ -168,8 +182,72 @@ details.mini>summary::-webkit-details-marker{display:none}
 .plano.pl-space h2{background:linear-gradient(135deg,#FFFFFF 0%,#C9CED6 45%,#F4F6F9 70%,#9EA4AD 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .plano.pl-promo{--ink:#FFF6EC;--muted:#F5DCC2;--line:#C98A55;--accent:#FFE2C2;--accent-hi:#FFFFFF;--accent-soft:#8A5428;--sunk:#9A5F2F;--good:#E6F5E1;--good-soft:#5D6B2E;--warn:#FFE3A8;--warn-soft:#7A4A12;--bad:#FFD3CC;--bad-soft:#7A2E22;
   background:linear-gradient(135deg,#C2824A 0%,#9A5F2F 55%,#B57440 100%);border:1px solid #7A4A22;color:var(--ink)}
+/* SM|STANDARD prata · FULL PASS dourado · MOVIMENT bronze (letras pretas) */
+.plano.pl-standard{--ink:#0E0E0E;--muted:#1F2226;--line:#5C6168;--accent:#1A1A1A;--accent-hi:#000;--accent-soft:#E4E7EB;--sunk:#D9DDE2;
+  background:linear-gradient(135deg,#B9BEC5 0%,#868C94 45%,#AEB3BA 70%,#6B7078 100%);border:1px solid #5C6168;color:var(--ink)}
+.plano.pl-full{--ink:#0E0E0E;--muted:#4A3A1E;--line:#B8924F;--accent:#1A1A1A;--accent-hi:#000;--accent-soft:#F6E6C4;--sunk:#EBD3A2;
+  background:linear-gradient(135deg,#F9E3B0 0%,#D9AE5C 45%,#F3D597 70%,#B88A3C 100%);border:1px solid #A67C34;color:var(--ink)}
+.plano.pl-moviment{--ink:#0E0E0E;--muted:#4A2E18;--line:#A86E43;--accent:#1A1A1A;--accent-hi:#000;--accent-soft:#F0D3B8;--sunk:#E2B993;
+  background:linear-gradient(135deg,#E8B489 0%,#B87A4B 45%,#DDA174 70%,#94603A 100%);border:1px solid #84552F;color:var(--ink)}
+.plano.pl-standard h2,.plano.pl-full h2,.plano.pl-moviment h2{color:#0E0E0E}
 .plano[class*="pl-"] .note{background:var(--accent-soft);color:var(--ink)}
 .plano[class*="pl-"] .chev{border-color:var(--accent)}
+/* área do aluno: identidade grafite + dourado */
+.area-aluno .card:not([class*="pl-"]),.area-aluno .aula,.card.ola,.card.treino,details.agds{
+  --surface:#2A2A2C;--sunk:#38383B;--ink:#F1EEEA;--muted:#C9C3BC;--line:#46464A;--accent:#E5BF94;--accent-hi:#F7D7B1;--accent-soft:#3A3226;
+  --warn:#E9B25E;--warn-soft:#3A2E18;--good:#9BCF9E;--good-soft:#1D2E1F;--bad:#EE8F82;--bad-soft:#3A1F1B;
+  background:#2A2A2C;border-color:#46464A;color:var(--ink)}
+.area-aluno{display:grid;gap:14px}
+.area-aluno .card:not([class*="pl-"]) h2,.area-aluno .card:not([class*="pl-"]) h3,.card.ola h2{color:#F1EEEA}
+.area-aluno details.ferias .pill.p-acc,.area-aluno details.agds .pill.p-acc{background:var(--gold);color:#1A140E}
+.card.ola .av{background:#38383B;color:#E5BF94;border-color:#55555A}
+.area-aluno .aula{border-left:3px solid #D9AE80}
+.area-aluno .aula .hora{color:#E5BF94}
+.area-aluno .aula .name,.area-aluno .aula .meta b{color:#F1EEEA}
+.area-aluno .aula .meta{color:#C9C3BC}
+.area-aluno .modtag{color:#E5BF94}
+.area-aluno .chip{background:#38383B;color:#C9C3BC}
+.area-aluno .chip[aria-pressed="true"]{background:var(--gold);color:#1A140E}
+.area-aluno .chip[aria-pressed="true"] .pt{background:#1A140E}
+.area-aluno input,.area-aluno select,.area-aluno textarea{background:#38383B;color:#F1EEEA;border-color:#55555A}
+.area-aluno .card button:not(.primary):not(.danger):not([data-act]):not(.espera-btn){background:#38383B;color:#F1EEEA;border-color:#55555A}
+details.agds>summary{list-style:none;display:flex;align-items:center;gap:12px;cursor:pointer}
+.area-aluno [data-act="agendar"],.area-aluno [data-act="pegarVaga"]{background:#4B5D2A;border:1.5px solid #D9AE80;color:#fff}
+.area-aluno [data-act="agendar"]:hover,.area-aluno [data-act="pegarVaga"]:hover{background:#3C4B21;filter:none}
+.area-aluno [data-act="desmarcarAluno"]{background:#6E1A2A;border:1.5px solid #D9AE80;color:#fff}
+.area-aluno [data-act="desmarcarAluno"]:hover{background:#561421}
+/* lista de espera em destaque: dourado com preto */
+.area-aluno .card.espera{--ink:#111;--muted:#2A1E12;--line:#B88A3C;
+  background:linear-gradient(135deg,#F7D7B1 0%,#E2B78A 45%,#F3D3AE 70%,#C99B6E 100%);border:2px solid #1A140E;box-shadow:0 0 0 4px rgba(217,174,128,.25),var(--shadow);color:#111}
+.area-aluno .card.espera h3{color:#111;font-size:20px;margin:0}
+.card.espera .eyebrow{color:#3A2A14}
+.area-aluno .card.espera .meta{color:#2A1E12}
+.espera-top{display:flex;align-items:center;gap:12px}
+.espera-ic{width:42px;height:42px;border-radius:50%;background:#111;display:grid;place-items:center;font-size:20px;flex:0 0 auto}
+.espera-n{background:#111;color:#F7D7B1}
+.area-aluno .card.espera select{background:#fff;color:#111;border-color:#1A140E}
+.espera-btn{background:#111;border-color:#111;color:#F7D7B1}
+.espera-btn:hover{background:#000}
+.area-aluno .card.espera .pill.p-wait{background:#111;color:#F7D7B1}
+.area-aluno .card.espera .danger{color:#7A1626}
+.area-aluno .ferias input[type=date]{-webkit-appearance:none;appearance:none;max-width:100%;min-height:44px;display:block}
+/* quem vai */
+details.quem{margin-top:6px}
+details.quem>summary{list-style:none;display:inline-flex;align-items:center;gap:6px;cursor:pointer;font:600 13px var(--f-body);color:#E5BF94;padding:4px 10px;border:1px solid #6A5A44;border-radius:999px;background:rgba(229,191,148,.08)}
+details.quem>summary::-webkit-details-marker{display:none}
+details.quem>summary .chev{width:7px;height:7px;margin:0 2px 3px;border-color:#E5BF94}
+details.quem:not([open])>summary .chev{transform:rotate(45deg);margin:0 2px 3px}
+details.quem[open]>summary .chev{transform:rotate(-135deg);margin-bottom:-3px}
+.quem-l{display:flex;flex-wrap:wrap;gap:6px;padding-top:8px}
+.quem-n{font-size:13px;padding:3px 10px;border-radius:999px;background:#38383B;color:#F1EEEA;border:1px solid #55555A}
+/* férias em blocos de 5 dias */
+.blocos{display:flex;gap:6px;flex-wrap:wrap}
+.bloco{flex:1 1 40px;text-align:center;padding:6px 0;border-radius:8px;font:600 12px var(--f-body);background:var(--good-soft);color:var(--good);border:1px solid #BFDDC2}
+.bloco.usado{background:var(--sunk);color:var(--muted);border-color:var(--line);text-decoration:line-through}
+/* loja: foto do produto */
+.prod{overflow:hidden}
+.prod-img{margin:-14px -14px 4px;aspect-ratio:4/3;background:var(--sunk)}
+.prod-img img{width:100%;height:100%;object-fit:cover;display:block}
 .busca{position:relative;display:flex;align-items:center}
 .busca svg{position:absolute;left:10px;color:var(--muted);pointer-events:none}
 .busca input{padding-left:36px;min-height:38px;font-size:15px}
@@ -395,7 +473,16 @@ function resumoVagas(t){const ds_=(t.dias||[]).slice().sort((x,y)=>((x+6)%7)-((y
 let OCC={},occOk=false;
 async function carregarOcupacao(){if(ROLE!=="aluno")return;try{const hoje=ds(new Date());const L=await SMCT.rpc("ocupacao",{p_de:addDays(hoje,-1),p_ate:addDays(hoje,31)});
   const m={};for(const r of L||[])m[r.turma_id+"|"+r.data]={n:Number(r.n)||0,k:Number(r.criancas)||0};OCC=m;occOk=true;render()}catch(e){console.error(e)}}
-async function depoisAluno(){await Promise.all([SMCT.recarregar(["reservas","movimentos","espera","alunos","pedidos"]),carregarOcupacao()])}
+async function depoisAluno(){await Promise.all([SMCT.recarregar(["reservas","movimentos","espera","alunos","pedidos"]),carregarOcupacao(),carregarQuem()])}
+/* quem vai em cada horário (aluno vê só o primeiro nome + inicial) */
+let QUEM={},quemOk=false,quemErro=false;
+async function carregarQuem(){if(ROLE!=="aluno")return;try{const hoje=ds(new Date());const L=await SMCT.rpc("quem_na_aula",{p_de:addDays(hoje,-1),p_ate:addDays(hoje,31)});
+  const m={};for(const r of L||[]){const k=r.turma_id+"|"+r.data;(m[k]=m[k]||[]).push(r.nome)}QUEM=m;quemOk=true;quemErro=false;render()}catch(e){console.error(e);quemErro=true;render()}}
+function nomeCurto(n){const p=String(n||"").trim().split(/\s+/).filter(Boolean);return p.length?p[0]+(p[1]?" "+p[1][0]+".":""):"Aluno"}
+function quemVai(tid,d){if(ROLE==="aluno")return quemOk?(QUEM[tid+"|"+d]||[]):null;
+  return S.reservas.filter(r=>r.turmaId===tid&&r.data===d&&["agendado","confirmado","presente"].includes(r.status)).map(r=>{const a=aluno(r.alunoId);return a?nomeCurto(a.nome):"Aluno"})}
+function quemHtml(tid,d){const L=quemVai(tid,d),k=tid+"|"+d;S.quemAberto=S.quemAberto||{};
+  return `<details class="quem" data-det="quem" data-k="${esc(k)}" ${S.quemAberto[k]?"open":""}><summary><span class="quem-ic" aria-hidden="true">👥</span>Quem vai${L?` · <b class="num">${L.length}</b>`:""}<span class="chev" aria-hidden="true"></span></summary><div class="quem-l">${L==null?`<span class="meta">${quemErro?"Lista indisponível no momento.":"Carregando…"}</span>`:L.length?L.map(x=>`<span class="quem-n">${esc(x)}</span>`).join(""):`<span class="meta">Ninguém agendado ainda.</span>`}</div></details>`}
 
 const DIAS=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
 const DIAS_LONGO=["domingo","segunda","terça","quarta","quinta","sexta","sábado"];
@@ -659,7 +746,8 @@ function planoDe(a){return S.cfg.planos.find(p=>p.id===a.plano)||null}
 function normNome(x){return String(x||"").trim().toLowerCase()}
 function ehStudio(t){return !!(t&&(t.studio||normNome(t.modalidade).includes("studio")))}
 function doStudio(a,t){return !!(t&&ehStudio(t)&&a.profStudio&&normNome(a.profStudio)===normNome(t.professor))}
-function permitido(a,t){const p=planoDe(a);if(!p||!(p.modalidades||[]).length||!t.modalidade)return true;return p.modalidades.includes(t.modalidade)}
+function modsExtra(a){return Array.isArray(a&&a.modsExtra)?a.modsExtra:[]}
+function permitido(a,t){const p=planoDe(a);if(!p||!(p.modalidades||[]).length||!t.modalidade)return true;return p.modalidades.includes(t.modalidade)||modsExtra(a).includes(t.modalidade)}
 function professores(){return [...new Set(S.turmas.map(t=>String(t.professor||"").trim()).filter(Boolean))].sort((x,y)=>x.localeCompare(y))}
 function fimSugerido(ini,per){if(!ini||!PERIODOS[per])return"";const d=new Date(ini+"T12:00:00");const dia=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+PERIODOS[per][1]);const ult=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();d.setDate(Math.min(dia,ult));d.setDate(d.getDate()-1);return ds(d)}
 function proxPagamento(a){if(a.pagamento!=="mensal"||!a.diaPagamento)return null;const hoje=ds(new Date());const base=new Date();
@@ -751,7 +839,7 @@ function vAlunos(){
   h+=`<div class="card"><div class="list">`;
   const hoje=ds(new Date());
   for(const a of L){const fer=(a.ferias||[]).find(f=>f.fim>=hoje);
-    h+=`<div class="item"><button class="ghost grow" style="justify-content:flex-start;padding:0;min-height:0;color:var(--ink)" data-act="abrirAluno" data-id="${a.id}"><span><span class="name">${esc(a.nome)}</span> ${flag(a)}<br><span class="meta">${(a.fixos||[]).map(id=>turma(id)).filter(Boolean).map(t=>esc(t.nome)+" "+diasDoFixo(a,t).map(d=>DIAS[d]).join("/")+" "+t.hora).join(" · ")||"Sem horário fixo"}</span></span></button>${planoDe(a)?`<span class="pill ${a.fim&&a.fim<hoje?"p-bad":"p-acc"}">${esc(planoDe(a).nome)}${a.fim&&a.fim<hoje?" · vencido":""}</span>`:""}${fer?`<span class="pill p-neutral">Férias ${fmtD(fer.inicio)}–${fmtD(fer.fim)}</span>`:""}${a.responsavelId&&aluno(a.responsavelId)?`<span class="pill p-neutral">Dependente de ${esc(aluno(a.responsavelId).nome.split(" ")[0])}</span>`:""}${a.ativo===false?`<span class="pill p-bad">Saiu em ${fmtFull(a.saidaEm)}</span>`:""}${a.profStudio?`<span class="pill p-acc">Studio · ${esc(a.profStudio)}</span>`:""}${contratoStatus(a).ok?"":`<span class="pill p-wait">Contrato pendente</span>`}${saldoPill(saldo(a.id))}${feriasPill(saldoFerias(a.id))}</div>`}
+    h+=`<div class="item"><button class="ghost grow" style="justify-content:flex-start;padding:0;min-height:0;color:var(--ink)" data-act="abrirAluno" data-id="${a.id}"><span><span class="name">${esc(a.nome)}</span> ${flag(a)}<br><span class="meta">${(a.fixos||[]).map(id=>turma(id)).filter(Boolean).map(t=>esc(t.nome)+" "+diasDoFixo(a,t).map(d=>DIAS[d]).join("/")+" "+t.hora).join(" · ")||"Sem horário fixo"}</span></span></button>${planoDe(a)?`<span class="pill ${a.fim&&a.fim<hoje?"p-bad":"p-acc"}">${esc(planoDe(a).nome)}${a.fim&&a.fim<hoje?" · vencido":""}</span>`:""}${modsExtra(a).length?`<span class="pill p-acc">+ ${modsExtra(a).map(esc).join(", ")}</span>`:""}${fer?`<span class="pill p-neutral">Férias ${fmtD(fer.inicio)}–${fmtD(fer.fim)}</span>`:""}${a.responsavelId&&aluno(a.responsavelId)?`<span class="pill p-neutral">Dependente de ${esc(aluno(a.responsavelId).nome.split(" ")[0])}</span>`:""}${a.ativo===false?`<span class="pill p-bad">Saiu em ${fmtFull(a.saidaEm)}</span>`:""}${a.profStudio?`<span class="pill p-acc">Studio · ${esc(a.profStudio)}</span>`:""}${contratoStatus(a).ok?"":`<span class="pill p-wait">Contrato pendente</span>`}${saldoPill(saldo(a.id))}${feriasPill(saldoFerias(a.id))}</div>`}
   if(!L.length)h+=`<div class="item meta">Nenhum aluno com esse nome.</div>`;
   return h+`</div></div>`}
 
@@ -761,13 +849,15 @@ function painelAluno(a,modo){
   let h=staff&&telDe(a)?contatoBtns(a,`Oi ${a.nome.split(" ")[0]}!`):"";
   h+=cardTreino(a);
   h+=cardPlano(a,staff);
-  h+=`<div class="card"><h2>Meus agendamentos</h2>`;
+  const p1=prox[0],t1=p1?turma(p1.turmaId)||{}:null;
+  const resAg=p1?`${prox.length} ${prox.length===1?"aula agendada":"aulas agendadas"} · próxima ${relD(p1.data)} às ${esc(t1.hora||"")}`:"Nenhuma aula agendada";
+  h+=`<details class="card plano agds" data-det="agds" ${S.agdsAberto===false?"":"open"}><summary><div class="grow"><div class="eyebrow">Minhas aulas</div><h2>Meus agendamentos</h2><div class="meta">${resAg}</div></div>${prox.length?`<span class="pill p-acc num">${prox.length}</span>`:""}<span class="chev" aria-hidden="true"></span></summary><div class="stack" style="gap:10px;padding-top:6px">`;
   if(!prox.length)h+=`<div class="meta">Nenhuma aula agendada.</div>`;
   else{const iniSem=semanaIni(hoje);h+=`<div class="list">`;
     for(const r of prox){const t=turma(r.turmaId)||{};const dl=DIAS_LONGO[wd(r.data)];const prox7=r.data>addDays(iniSem,6);
-      h+=`<div class="agd mod" style="--m:${corMod(t.modalidade)}"><div class="agd-l"><span class="agd-dia">${dl.charAt(0).toUpperCase()+dl.slice(1)}${prox7?`<small>próx. semana</small>`:""}</span><span class="agd-txt"><b>${esc(t.hora||"")}</b> ${esc(t.modalidade?cap(t.modalidade):t.nome||"Aula")}${r.tipo==="reposicao"?` <span class="pill p-wait">Reposição</span>`:""}</span><span class="prof">${t.professor?`com <b>${esc(t.professor)}</b>`:""}${Number(r.criancas)>0?` · ${r.criancas} na brinquedoteca`:""}</span></div><div class="agd-r"><details class="mini"><summary aria-label="Opções">···</summary><div class="stack" style="gap:8px;padding-top:8px">${kidsSel("rk_"+r.id,r.criancas,r.id)}</div></details><button class="small" data-act="${staff?"desmarcarStaff":"desmarcarAluno"}" data-id="${r.id}">Desmarcar</button></div></div>`}
+      h+=`<div class="agd mod" style="--m:${corMod(t.modalidade)}"><div class="agd-l"><span class="agd-dia">${dl.charAt(0).toUpperCase()+dl.slice(1)}${prox7?`<small>próx. semana</small>`:""}</span><span class="agd-txt"><b>${esc(t.hora||"")}</b> ${esc(t.modalidade?cap(t.modalidade):t.nome||"Aula")}${r.tipo==="reposicao"?` <span class="pill p-wait">Reposição</span>`:""}</span><span class="prof">${t.professor?`com <b>${esc(t.professor)}</b>`:""}${Number(r.criancas)>0?` · ${r.criancas} na brinquedoteca`:""}</span>${quemHtml(r.turmaId,r.data)}</div><div class="agd-r"><details class="mini"><summary aria-label="Opções">···</summary><div class="stack" style="gap:8px;padding-top:8px">${kidsSel("rk_"+r.id,r.criancas,r.id)}</div></details><button class="small" data-act="${staff?"desmarcarStaff":"desmarcarAluno"}" data-id="${r.id}">Desmarcar</button></div></div>`}
     h+=`</div>`}
-  h+=`<div class="meta">Você não precisa confirmar: está agendado, é só vir. Desmarcando até ${prazoTxt()} antes, você ganha 1 crédito para repor a aula.</div></div>`;
+  h+=`<div class="meta">Você não precisa confirmar: está agendado, é só vir. Desmarcando até ${prazoTxt()} antes, você ganha 1 crédito para repor a aula.</div></div></details>`;
   // reposição e lista de espera
   const opts=[],cheias=[];for(let i=0;i<14;i++){const d=addDays(hoje,i);if(emFerias(a,d))continue;
     for(const t of S.turmas){if(!(t.dias||[]).includes(wd(d)))continue;const ts=new Date(d+"T"+t.hora+":00").getTime();if(ts<=now)continue;
@@ -784,23 +874,27 @@ function painelAluno(a,modo){
     if(!doDia.length)h+=`<div class="card empty">Sem horários com vaga neste dia.</div>`;
     for(const o of doDia){
       const tag=o.c.tipo==="reposicao"?`<span class="pill p-wait">Reposição</span>`:o.c.tipo==="livre"?`<span class="pill p-neutral">Aula aberta</span>`:"";
-      h+=`<div class="aula mod" style="--m:${corMod(o.t.modalidade)}"><span class="hora">${esc(o.t.hora)}</span><div class="info">${modTag(o.t)}<div class="name">${esc(o.t.nome)} ${tag}${permitido(a,o.t)?"":` <span class="pill p-bad">Fora do plano</span>`}</div><div class="meta">${profTxt(o.t)} · ${o.livres} ${o.livres===1?"vaga":"vagas"}</div></div><div class="act"><button class="small primary" data-act="agendar" data-aluno="${a.id}" data-turma="${o.t.id}" data-v="${o.d}" data-staff="${staff?1:""}">Agendar</button></div></div>`}
+      h+=`<div class="aula mod" style="--m:${corMod(o.t.modalidade)}"><span class="hora">${esc(o.t.hora)}</span><div class="info">${modTag(o.t)}<div class="name">${esc(o.t.nome)} ${tag}${permitido(a,o.t)?"":` <span class="pill p-bad">Fora do plano</span>`}</div><div class="meta">${profTxt(o.t)} · ${o.livres} ${o.livres===1?"vaga":"vagas"}</div>${quemHtml(o.t.id,o.d)}</div><div class="act"><button class="small primary" data-act="agendar" data-aluno="${a.id}" data-turma="${o.t.id}" data-v="${o.d}" data-staff="${staff?1:""}">Agendar</button></div></div>`}
   }
   h+=`</div>`;
   // lista de espera
   const meus=S.espera.filter(e=>e.alunoId===a.id&&e.status!=="atendido"&&turma(e.turmaId)&&new Date(e.data+"T"+turma(e.turmaId).hora+":00").getTime()>now).sort((x,y)=>x.data.localeCompare(y.data));
-  h+=`<div class="card"><h3>Lista de espera</h3><div class="meta">Escolha um horário lotado que você queria. Se alguém desmarcar, você é avisado${staff?"":" aqui e o estúdio te chama no WhatsApp"}.</div>`;
+  h+=`<div class="card espera"><div class="espera-top"><span class="espera-ic" aria-hidden="true">⏳</span><div class="grow"><div class="eyebrow">Horário lotado?</div><h3>Lista de espera</h3></div>${meus.length?`<span class="pill espera-n num">${meus.length} ${meus.length===1?"pedido":"pedidos"}</span>`:""}</div><div class="meta">Escolha um horário lotado que você queria. Se alguém desmarcar, você é avisado${staff?"":" aqui e o estúdio te chama no WhatsApp"}.</div>`;
   if(meus.length){h+=`<div class="list">`;for(const e of meus){const t=turma(e.turmaId),L=livres(t.id,e.data);
     h+=`<div class="item"><div class="grow"><div class="name">${esc(t.nome)}</div><div class="meta">${relD(e.data)} às ${esc(t.hora)}</div></div>${e.status==="vaga"&&L>0?`<span class="pill p-ok"><span class="dot"></span>Abriu vaga!</span><button class="small primary" data-act="pegarVaga" data-id="${e.id}">Pegar a vaga</button>`:`<span class="pill p-wait">Aguardando vaga</span>`}<button class="small ghost danger" data-act="sairEspera" data-id="${e.id}">Sair</button></div>`}h+=`</div>`}
-  if(cheias.length)h+=`<form class="row" data-form="espera" data-aluno="${a.id}"><select id="esp_${a.id}" class="grow" style="flex:1 1 220px" aria-label="Horário lotado">${cheias.slice(0,80).map(o=>`<option value="${o.t.id}|${o.d}">${relD(o.d)} ${o.t.hora} · ${esc(o.t.nome)} (lotada)</option>`).join("")}</select><button class="small">Entrar na lista</button></form>`;
+  if(cheias.length)h+=`<form class="row" data-form="espera" data-aluno="${a.id}"><select id="esp_${a.id}" class="grow" style="flex:1 1 220px" aria-label="Horário lotado">${cheias.slice(0,80).map(o=>`<option value="${o.t.id}|${o.d}">${relD(o.d)} ${o.t.hora} · ${esc(o.t.nome)} (lotada)</option>`).join("")}</select><button class="small espera-btn">Entrar na lista</button></form>`;
   else if(!meus.length)h+=`<div class="meta">Nenhum horário lotado nos próximos 14 dias.</div>`;
   h+=`</div>`;
   // férias
   const fer=(a.ferias||[]).filter(f=>f.fim>=hoje);
   const dir=feriasDireito(a),usd=feriasUsadas(a);
-  h+=`<div class="card"><div class="row between"><h3>Férias</h3>${dir?`<span class="pill ${usd>=dir?"p-bad":"p-acc"} num">${Math.max(0,dir-usd)} de ${dir} dias disponíveis</span>`:""}</div><div class="meta">${dir?`Seu plano ${PERIODOS[a.periodo][0].toLowerCase()} dá direito a ${dir} dias de férias. As aulas do período viram créditos de férias, que você pode usar depois para repor quando passar do limite de reposições do mês.`:"Seu plano não inclui dias de férias. Para se ausentar, desmarque as aulas normalmente ou fale com o estúdio."}</div>`;
+  const restaF=Math.max(0,dir-usd),blocosF=Math.ceil(dir/5),usadosF=Math.min(blocosF,Math.ceil(usd/5));
+  const maxF=staff?Math.max(30,restaF):restaF,opF=[];for(let d=5;d<=maxF;d+=5)opF.push(d);
+  h+=`<details class="card plano ferias" data-det="ferias" ${S.feriasAberto?"open":""}><summary><div class="grow"><div class="eyebrow">Férias</div><h3>Trancamento de férias</h3><div class="meta">${dir?`${restaF} de ${dir} dias disponíveis`:"Seu plano não inclui dias de férias"}</div></div>${dir?`<span class="pill ${usd>=dir?"p-bad":"p-acc"} num">${restaF}d</span>`:""}<span class="chev" aria-hidden="true"></span></summary><div class="stack" style="gap:10px;padding-top:6px">${dir?`<div class="blocos" aria-label="${usd} de ${dir} dias usados">${Array.from({length:blocosF},(_,i)=>`<span class="bloco ${i<usadosF?"usado":""}">5d</span>`).join("")}</div><div class="meta">Adicione em blocos de 5 dias, quantas vezes quiser, até completar ${dir} dias.</div>`:""}<div class="meta">${dir?`Seu plano ${PERIODOS[a.periodo][0].toLowerCase()} dá direito a ${dir} dias de férias. As aulas do período viram créditos de férias, que você pode usar depois para repor quando passar do limite de reposições do mês.`:"Seu plano não inclui dias de férias. Para se ausentar, desmarque as aulas normalmente ou fale com o estúdio."}</div>`;
   if(fer.length)h+=`<div class="list">${fer.map(f=>`<div class="item"><span>${fmtD(f.inicio)} até ${fmtD(f.fim)} <span class="meta">· ${f.dias||diasEntre(f.inicio,f.fim)} dias${f.creditos?` · ${f.creditos} créditos de férias`:""}</span></span><button class="small ghost danger" data-act="rmFerias" data-aluno="${a.id}" data-id="${f.id}">Remover</button></div>`).join("")}</div>`;
-  if(dir||staff)h+=`<form class="formgrid" data-form="ferias" data-aluno="${a.id}" data-staff="${staff?1:""}"><label>De<input type="date" id="fi_${a.id}" min="${hoje}" required></label><label>Até<input type="date" id="ff_${a.id}" min="${hoje}" required></label><div style="display:flex;align-items:end"><button class="small" style="width:100%">Avisar férias</button></div></form></div>`;
+  if((dir||staff)&&opF.length)h+=`<form class="formgrid" data-form="ferias" data-aluno="${a.id}" data-staff="${staff?1:""}"><label>Começa em<input type="date" id="fi_${a.id}" min="${hoje}" required></label><label>Quantos dias<select id="fd_${a.id}">${opF.map(d=>`<option value="${d}">${d} dias</option>`).join("")}</select></label><div style="display:flex;align-items:end"><button class="small primary" style="width:100%">+ Adicionar férias</button></div></form>`;
+  else if(dir)h+=`<div class="meta">Você já usou todos os dias de férias do plano.</div>`;
+  h+=`</div></details>`;
   if(staff){
     h+=`<div class="card"><h3>Ajustar créditos</h3><form class="formgrid" data-form="creditos" data-aluno="${a.id}"><label>Tipo<select id="ctp_${a.id}"><option value="credito">Crédito de reposição</option><option value="ferias">Crédito de férias</option></select></label><label>Quantidade<input type="number" id="cq_${a.id}" value="1" step="1"></label><label>Motivo<input id="cm_${a.id}" value="Ajuste manual"></label><div style="display:flex;align-items:end"><button class="small primary" style="width:100%">Lançar</button></div></form><div class="meta">Use número negativo para retirar.</div></div>`;
     h+=`<div class="card"><h3>Horários fixos</h3><div class="meta">${autoOn()?`As aulas destes horários são geradas sozinhas para os próximos ${diasFixos()} dias. Férias, fim do plano e saída do aluno são respeitados.`:"A geração automática está desligada em Ajustes."}</div>${S.turmas.length?`<form class="stack" data-form="fixos" data-aluno="${a.id}"><div class="days">${S.turmas.slice().sort((x,y)=>x.hora.localeCompare(y.hora)).map(t=>`<label><input type="checkbox" id="fx_${a.id}_${t.id}" value="${t.id}" ${(a.fixos||[]).includes(t.id)?"checked":""}>${esc(t.nome)} ${((a.fixos||[]).includes(t.id)?diasDoFixo(a,t):t.dias).map(d=>DIAS[d]).join("/")} ${t.hora}</label>`).join("")}</div><div><button class="small">Salvar horários</button></div></form>${(a.fixos||[]).map(turma).filter(Boolean).length?`<div class="list">${(a.fixos||[]).map(turma).filter(Boolean).map(t=>`<div class="item"><span class="grow">${esc(t.hora)} ${esc(t.nome)} · <b>${diasDoFixo(a,t).map(d=>DIAS[d]).join(", ")}</b></span><button type="button" class="small" data-act="fixoEditDias" data-aluno="${a.id}" data-turma="${t.id}">Escolher dias</button></div>`).join("")}</div>`:""}`:`<div class="meta">Crie turmas em Ajustes.</div>`}</div>`;
@@ -812,12 +906,12 @@ function painelAluno(a,modo){
     h+=`<div class="card"><h3>Dados</h3><form class="formgrid" data-form="editAluno" data-aluno="${a.id}"><label>Nome<input id="en_${a.id}" value="${esc(a.nome)}" required></label><label>WhatsApp<input id="et_${a.id}" value="${esc(a.telefone||"")}" inputmode="tel"></label><label>Nascimento<input id="eb_${a.id}" type="date" value="${esc(a.nascimento||"")}"></label><label>E-mail<input id="em_${a.id}" type="email" value="${esc(a.email||"")}" placeholder="nome@email.com"></label><label>CPF<input id="ec_${a.id}" value="${esc(a.cpf||"")}" inputmode="numeric" placeholder="000.000.000-00"></label><label style="grid-column:1/-1">Endereço<input id="ed_${a.id}" value="${esc(a.endereco||"")}" placeholder="Rua, número, bairro, cidade"></label><label>Professor responsável (treino)<input id="eps_${a.id}" list="profs_dl" value="${esc(a.profStudio||"")}" placeholder="Nenhum"><datalist id="profs_dl">${professores().map(p=>`<option value="${esc(p)}">`).join("")}</datalist></label><label>Responsável (se for menor)<select id="er_${a.id}"><option value="">Nenhum</option>${S.alunos.filter(x=>x.id!==a.id&&x.responsavelId!==a.id).sort((x,y)=>x.nome.localeCompare(y.nome)).map(x=>`<option value="${x.id}" ${a.responsavelId===x.id?"selected":""}>${esc(x.nome)}</option>`).join("")}</select></label><div style="display:flex;align-items:end;gap:8px"><button class="small" style="flex:1">Salvar</button><button type="button" class="small danger" data-act="excluirAluno" data-id="${a.id}">Excluir</button></div></form></div>`}
   return h}
 
-function temaPlano(p){const n=normNome(p&&p.nome);if(!n)return"";if(n.includes("black space")||n.includes("blackspace"))return"pl-space";if(n.includes("black"))return"pl-black";if(n.includes("basic"))return"pl-basic";if(n.includes("promo"))return"pl-promo";return""}
+function temaPlano(p){const n=normNome(p&&p.nome);if(!n)return"";if(n.includes("standard"))return"pl-standard";if(n.includes("full pass")||n.includes("fullpass")||n.includes("full"))return"pl-full";if(n.includes("moviment")||n.includes("movement"))return"pl-moviment";if(n.includes("black space")||n.includes("blackspace"))return"pl-space";if(n.includes("black"))return"pl-black";if(n.includes("basic"))return"pl-basic";if(n.includes("promo"))return"pl-promo";return""}
 function cardTreino(a){
   const hoje=ds(new Date()),v=vezes(a),k=aulasNaSemana(a.id,hoje),cr=saldo(a.id),fe=saldoFerias(a.id),us=repNoMes(a.id,hoje),lim=limiteRep(a);
   const mes=new Date().toLocaleDateString("pt-BR",{month:"long"});
   const stat=(rot,val,sub,cls)=>`<div class="stat"><div class="eyebrow">${rot}</div><div class="saldo ${cls||""}" style="font-size:30px">${val}</div><div class="meta">${sub}</div></div>`;
-  return `<div class="card"><div class="row between"><h3>Meu treino</h3>${v?`<span class="pill p-acc">${v}x por semana</span>`:`<span class="pill p-neutral">Frequência não definida</span>`}</div>
+  return `<div class="card treino"><div class="row between"><h3>Meu treino</h3>${v?`<span class="pill p-acc">${v}x por semana</span>`:`<span class="pill p-neutral">Frequência não definida</span>`}</div>
   <div class="stats">${stat("Esta semana",v?`${k}<span class="meta" style="font-size:16px"> / ${v}</span>`:k,v?(k>=v?"semana completa; a próxima aula é reposição":`${v-k} ${v-k===1?"aula":"aulas"} ainda dentro do plano`):"aulas agendadas")}
   ${stat("Créditos de reposição",cr,cr===1?"aula desmarcada para repor":"aulas desmarcadas para repor",cr<0?"minus":"")}
   ${stat("Reposições em "+mes,`${us}<span class="meta" style="font-size:16px"> / ${lim}</span>`,us>=lim?"limite do mês atingido":`${lim-us} ainda ${lim-us===1?"disponível":"disponíveis"}`)}
@@ -831,6 +925,7 @@ function cardPlano(a,staff){
     let h=`<details class="card plano ${temaPlano(p)}" data-det="plano" ${S.planoAberto?"open":""}><summary><div class="grow"><div class="eyebrow">Seu plano</div><h2>${esc(p?p.nome:"Plano")}</h2><div class="meta">${resumo}</div></div>${venc?`<span class="pill p-bad">Vencido</span>`:a.fim&&diasAte(a.fim)<=7?`<span class="pill p-wait">Renovar em breve</span>`:`<span class="pill p-ok">Ativo</span>`}<span class="chev" aria-hidden="true"></span></summary><div class="stack" style="gap:12px;padding-top:6px">`;
     h+=`<div class="formgrid">`;
     if(p&&(p.modalidades||[]).length)h+=`<div><div class="eyebrow">Modalidades</div><div>${p.modalidades.map(esc).join(", ")}</div></div>`;
+    if(modsExtra(a).length)h+=`<div><div class="eyebrow">Modalidade adicional</div><div>${modsExtra(a).map(esc).join(", ")}</div></div>`;
     if(a.periodo)h+=`<div><div class="eyebrow">Tipo</div><div>${PERIODOS[a.periodo]?PERIODOS[a.periodo][0]:""}${a.pagamento?" · "+(a.pagamento==="mensal"?"pagamento mensal":"pagamento único"):""}</div></div>`;
     if(a.inicio||a.fim)h+=`<div><div class="eyebrow">Vigência</div><div class="num">${fmtFull(a.inicio)}${a.fim?" até "+fmtFull(a.fim):""}</div></div>`;
     if(a.forma)h+=`<div><div class="eyebrow">Forma de pagamento</div><div>${esc(a.forma)}</div></div>`;
@@ -855,6 +950,7 @@ function cardPlano(a,staff){
   <label>Vencimento (pagamento único)<input type="date" id="pl_vu_${id}" value="${esc(a.vencUnico||"")}"></label>
   <label>Vezes por semana<input type="number" min="1" max="7" id="pl_vz_${id}" value="${esc(a.vezesSemana||"")}" placeholder="Ex.: 2"></label>
   <label>Reposições por mês<input type="number" min="0" max="31" id="pl_rm_${id}" value="${esc(a.reposicoesMes===""||a.reposicoesMes==null?3:a.reposicoesMes)}"></label>
+  <div style="grid-column:1/-1;display:grid;gap:6px"><span class="eyebrow">Modalidade adicional</span>${S.cfg.modalidades.length?`<div class="days">${S.cfg.modalidades.map((m,i)=>{const noPlano=p&&(p.modalidades||[]).includes(m);return `<label${noPlano?' title="Já está no plano"':""}><input type="checkbox" id="pl_mx_${id}_${i}" value="${esc(m)}" ${modsExtra(a).includes(m)?"checked":""} ${noPlano?"disabled":""}>${esc(m)}${noPlano?" (no plano)":""}</label>`}).join("")}</div><div class="meta">Marque as modalidades que o aluno faz além do plano. Ele passa a ver e agendar esses horários.</div>`:`<div class="meta">Cadastre as modalidades em Ajustes.</div>`}</div>
   <label style="grid-column:1/-1">Observação financeira<input id="pl_ob_${id}" value="${esc(a.obsFin||"")}" placeholder="Ex.: 1x600 + 5x500, pago adiantado"></label>
   </div><div class="meta">Férias pelo período: trimestral 15 dias, semestral 20, anual 30. A data fim é preenchida sozinha pelo início e período; você pode ajustar. O dia do pagamento aparece para o aluno quando o pagamento é mensal.${pg?` Próximo: ${fmtFull(pg)}.`:""}</div><div><button class="small primary">Salvar plano</button></div></form></div>`}
 
@@ -870,14 +966,14 @@ function vAluno(){
   const deps=dependentes(eu);const a=deps.find(x=>x.id===S.perfil)||eu;
   if(deps.length)h+=`<div class="stack"><div class="eyebrow">Perfil</div><div class="chips" role="group" aria-label="Perfil">${[eu,...deps].map(x=>`<button class="chip" style="min-width:auto;padding:8px 14px" aria-pressed="${x.id===a.id}" data-act="perfil" data-v="${x.id}"><span style="font-weight:600">${x.id===eu.id?"Você":esc(x.nome.split(" ")[0])}</span></button>`).join("")}</div>${a.id!==eu.id?`<div class="meta">Você está agendando, desmarcando e avisando férias por ${esc(a.nome)}.</div>`:""}</div>`;
   const abriu=S.espera.filter(e=>e.alunoId===a.id&&e.status==="vaga"&&turma(e.turmaId)&&livres(e.turmaId,e.data)>0&&new Date(e.data+"T"+turma(e.turmaId).hora+":00").getTime()>Date.now());
-  h+=`<div class="row" style="gap:14px">${avatar(a,56)}<div class="grow"><h2>${a.id===eu.id?`Olá, ${esc(eu.nome.split(" ")[0])}`:`Perfil de ${esc(a.nome)}`}</h2>${fotoBtn(a,a.foto?"Trocar foto":"Adicionar foto para o professor")}</div></div>`;
+  h+=`<div class="card ola"><div class="row" style="gap:14px">${avatar(a,56)}<div class="grow"><h2>${a.id===eu.id?`Olá, ${esc(eu.nome.split(" ")[0])}`:`Perfil de ${esc(a.nome)}`}</h2>${fotoBtn(a,a.foto?"Trocar foto":"Adicionar foto para o professor")}</div></div></div>`;
   for(const e of abriu){const t=turma(e.turmaId);h+=`<div class="card" style="border-color:var(--good)"><div class="row between"><div class="grow"><div class="eyebrow" style="color:var(--good)">Abriu vaga</div><div class="name">${esc(t.nome)} · ${relD(e.data)} às ${esc(t.hora)}</div></div><button class="primary small" data-act="pegarVaga" data-id="${e.id}">Pegar a vaga</button></div></div>`}
   const nv=diasAteNiver(a);if(nv===0)h+=`<div class="note">Feliz aniversário, ${esc(a.nome.split(" ")[0])}! Que seu novo ano seja cheio de saúde e movimento.</div>`;
   const nAv=avisosAtivos().filter(x=>x.importante).length;
   const subs=[["aulas","Minhas aulas"],["studio","Studio"],["avisos","Avisos"+(nAv?` <span class="badge">${nAv}</span>`:"")],["professor","Falar com professor"],["parceiros","Parceiros"],["loja","Loja"],["contrato","Contrato"+(contratoStatus(a).ok?"":` <span class="badge">!</span>`)]];
   h+=`<div class="tabrow" role="tablist" aria-label="Área do aluno">${subs.map(([k,l])=>`<button class="tab" role="tab" aria-selected="${S.subAluno===k}" data-act="subAluno" data-v="${k}">${l}</button>`).join("")}</div>`;
   const F={aulas:()=>painelAluno(a,"aluno"),studio:()=>alunoStudio(a),avisos:()=>alunoAvisos(a),professor:()=>alunoProfessor(a),parceiros:alunoParceiros,loja:()=>alunoLoja(a),contrato:()=>alunoContrato(a,eu)}[S.subAluno]||(()=>painelAluno(a,"aluno"));
-  return h+F()}
+  return h+`<div class="area-aluno">${F()}</div>`}
 
 /* ---------- comunicação ---------- */
 function brl(n){return (Number(n)||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}
@@ -939,7 +1035,7 @@ function alunoLoja(a){
   const L=S.produtos.filter(p=>p.disponivel!==false).sort((x,y)=>x.nome.localeCompare(y.nome));
   let h=`<div class="stack"><h2>Nossa loja</h2><div class="meta">Peça pelo app e retire no estúdio. O pagamento é combinado na retirada.</div>`;
   if(!L.length)h+=`<div class="card empty">Nenhum produto disponível no momento.</div>`;
-  for(const p of L)h+=`<div class="card"><div class="row between"><div class="grow"><h3>${esc(p.nome)}</h3>${p.descricao?`<div class="meta" style="white-space:pre-line">${esc(p.descricao)}</div>`:""}</div><span class="time" style="font-size:20px">${brl(p.preco)}</span></div><form class="row" data-form="pedido" data-aluno="${a.id}" data-produto="${p.id}">${p.opcoes?`<select id="po_${a.id}_${p.id}" aria-label="Opção" style="flex:1 1 140px">${String(p.opcoes).split(",").map(o=>o.trim()).filter(Boolean).map(o=>`<option>${esc(o)}</option>`).join("")}</select>`:""}<select id="pq_${a.id}_${p.id}" aria-label="Quantidade" style="width:auto">${[1,2,3,4,5].map(n=>`<option>${n}</option>`).join("")}</select><button class="primary small">Pedir</button></form></div>`;
+  for(const p of L)h+=`<div class="card prod">${blobUrl(p.foto)?`<div class="prod-img"><img src="${esc(blobUrl(p.foto))}" alt="${esc(p.nome)}" loading="lazy"></div>`:""}<div class="row between"><div class="grow"><h3>${esc(p.nome)}</h3>${p.descricao?`<div class="meta" style="white-space:pre-line">${esc(p.descricao)}</div>`:""}</div><span class="time" style="font-size:20px">${brl(p.preco)}</span></div><form class="row" data-form="pedido" data-aluno="${a.id}" data-produto="${p.id}">${p.opcoes?`<select id="po_${a.id}_${p.id}" aria-label="Opção" style="flex:1 1 140px">${String(p.opcoes).split(",").map(o=>o.trim()).filter(Boolean).map(o=>`<option>${esc(o)}</option>`).join("")}</select>`:""}<select id="pq_${a.id}_${p.id}" aria-label="Quantidade" style="width:auto">${[1,2,3,4,5].map(n=>`<option>${n}</option>`).join("")}</select><button class="primary small">Pedir</button></form></div>`;
   const meus=S.pedidos.filter(x=>x.alunoId===a.id).sort((x,y)=>String(y.criadoEm).localeCompare(String(x.criadoEm)));
   if(meus.length)h+=`<div class="card"><h3>Seus pedidos</h3><div class="list">${meus.slice(0,10).map(x=>`<div class="item"><div class="grow"><div class="name">${x.qtd}× ${esc(x.produtoNome)}${x.opcao?" ("+esc(x.opcao)+")":""}</div><div class="meta">${quando(x.criadoEm)} · ${brl(x.total)}</div></div>${stPill(PED_ST,x.status)}${x.status==="novo"?`<button class="small ghost danger" data-act="cancelarPedido" data-id="${x.id}">Cancelar</button>`:""}</div>`).join("")}</div></div>`;
   return h+`</div>`}
@@ -971,8 +1067,8 @@ function vComunicacao(){
   // loja
   const P=S.pedidos.slice().sort((x,y)=>{const o={novo:0,separado:1,entregue:2,cancelado:3};return (o[x.status]-o[y.status])||String(y.criadoEm).localeCompare(String(x.criadoEm))});
   h+=`<div class="card"><h2>Pedidos</h2><div class="list">${P.slice(0,60).map(x=>{const a=aluno(x.alunoId)||{nome:x.clienteNome||"Aluno removido"};return `<div class="item"><div class="grow"><div class="name">${x.qtd}× ${esc(x.produtoNome)}${x.opcao?" ("+esc(x.opcao)+")":""}</div><div class="meta">${esc(a.nome)} · ${quando(x.criadoEm)} · ${brl(x.total)}</div></div>${stPill(PED_ST,x.status)}<div class="row">${x.status==="novo"?`<button class="small" data-act="pedSt" data-v="separado" data-id="${x.id}">Separado</button>`:""}${x.status==="novo"||x.status==="separado"?`<button class="small primary" data-act="pedSt" data-v="entregue" data-id="${x.id}">Entregue</button><button class="small ghost danger" data-act="pedSt" data-v="cancelado" data-id="${x.id}">Cancelar</button>`:""}</div></div>`}).join("")||`<div class="item meta">Nenhum pedido ainda.</div>`}</div></div>`;
-  h+=`<div class="card"><h2>Novo produto</h2><form class="stack" data-form="novoProduto"><div class="formgrid"><label>Produto<input id="pr_n" required placeholder="Garrafa térmica"></label><label>Preço (R$)<input id="pr_p" required inputmode="decimal" placeholder="89,90"></label><label>Opções (separe por vírgula)<input id="pr_o" placeholder="P, M, G"></label></div><label>Descrição${ta("pr_d","Cor, material, tamanho…",false)}</label><div><button class="primary small">Adicionar produto</button></div></form></div>`;
-  h+=`<div class="card"><h3>Produtos</h3><div class="list">${S.produtos.slice().sort((x,y)=>x.nome.localeCompare(y.nome)).map(p=>`<div class="item"><div class="grow"><div class="name">${esc(p.nome)}</div><div class="meta">${brl(p.preco)}${p.opcoes?" · "+esc(p.opcoes):""}</div></div><button class="small ${p.disponivel===false?"":"ghost"}" data-act="toggleProd" data-id="${p.id}">${p.disponivel===false?"Esgotado":"Disponível"}</button><button class="small" data-act="editar" data-col="produtos" data-id="${p.id}">Editar</button><button class="small ghost danger" data-act="rmDoc" data-col="produtos" data-id="${p.id}">Remover</button></div>`).join("")||`<div class="item meta">Nenhum produto ainda.</div>`}</div></div>`;
+  h+=`<div class="card"><h2>Novo produto</h2><form class="stack" data-form="novoProduto"><div class="formgrid"><label>Produto<input id="pr_n" required placeholder="Garrafa térmica"></label><label>Preço (R$)<input id="pr_p" required inputmode="decimal" placeholder="89,90"></label><label>Opções (separe por vírgula)<input id="pr_o" placeholder="P, M, G"></label><label>Foto do produto<input id="pr_foto" type="file" accept="image/*"></label></div><label>Descrição${ta("pr_d","Cor, material, tamanho…",false)}</label><div><button class="primary small">Adicionar produto</button></div></form></div>`;
+  h+=`<div class="card"><h3>Produtos</h3><div class="list">${S.produtos.slice().sort((x,y)=>x.nome.localeCompare(y.nome)).map(p=>`<div class="item">${fotoProduto(p,56)}<div class="grow"><div class="name">${esc(p.nome)}</div><div class="meta">${brl(p.preco)}${p.opcoes?" · "+esc(p.opcoes):""}</div><div class="row" style="gap:4px;flex-wrap:nowrap"><label class="fotolink"><input type="file" accept="image/*" data-fotoproduto="${p.id}" hidden>${p.foto?"Trocar foto":"Adicionar foto"}</label>${p.foto?` <button style="min-height:0;padding:0 4px" type="button" class="ghost small danger" data-act="rmFotoProduto" data-id="${p.id}">Tirar foto</button>`:""}</div></div><button class="small ${p.disponivel===false?"":"ghost"}" data-act="toggleProd" data-id="${p.id}">${p.disponivel===false?"Esgotado":"Disponível"}</button><button class="small" data-act="editar" data-col="produtos" data-id="${p.id}">Editar</button><button class="small ghost danger" data-act="rmDoc" data-col="produtos" data-id="${p.id}">Remover</button></div>`).join("")||`<div class="item meta">Nenhum produto ainda.</div>`}</div></div>`;
   return h}
 
 document.addEventListener("click",e=>{
@@ -1012,7 +1108,9 @@ document.addEventListener("submit",e=>{
     run(async()=>{let foto="";if(file){const blob=await reduzirLogo(file);if(!blob)throw new Error("formato");foto=(await assetsNs.upload(blob,{type:blob.type||"image/jpeg"})).id}
       await db.collection("parceiros").add({nome:n,categoria:v("pa_c"),beneficio:v("pa_b"),cupom:v("pa_cup"),link:linkSeguro(v("pa_l"))||"",contato:v("pa_ct"),descricao:v("pa_d"),foto,criadoEm:now});["pa_n","pa_c","pa_b","pa_cup","pa_l","pa_ct","pa_d","pa_foto"].forEach(i=>document.getElementById(i).value="")},"Parceiro adicionado")}
   if(k==="novoProduto"){const n=v("pr_n"),p=parsePreco(v("pr_p"));if(!n)return;if(!p){toast("Informe o preço, ex.: 89,90");return}
-    run(async()=>{await db.collection("produtos").add({nome:n,preco:p,opcoes:v("pr_o"),descricao:v("pr_d"),disponivel:true,criadoEm:now});["pr_n","pr_p","pr_o","pr_d"].forEach(i=>document.getElementById(i).value="")},"Produto adicionado")}
+    const arqP=(document.getElementById("pr_foto")||{}).files;const fileP=arqP&&arqP[0];
+    run(async()=>{let foto="";if(fileP){const blob=await reduzirLogo(fileP);if(!blob)throw new Error("formato");foto=(await assetsNs.upload(blob,{type:blob.type||"image/jpeg"})).id}
+      await db.collection("produtos").add({nome:n,preco:p,opcoes:v("pr_o"),descricao:v("pr_d"),foto,disponivel:true,criadoEm:now});["pr_n","pr_p","pr_o","pr_d","pr_foto"].forEach(i=>document.getElementById(i).value="")},"Produto adicionado")}
   if(k==="pedido"){const aid=f.dataset.aluno,pid=f.dataset.produto;const p=S.produtos.find(x=>x.id===pid);if(!p)return;const q=parseInt(v("pq_"+aid+"_"+pid),10)||1;
     run(()=>ROLE==="aluno"?SMCT.rpc("aluno_pedido",{p_aluno:aid,p_produto:pid,p_opcao:v("po_"+aid+"_"+pid),p_qtd:q}).then(depoisAluno):db.collection("pedidos").add({alunoId:aid,produtoId:pid,produtoNome:p.nome,opcao:v("po_"+aid+"_"+pid),qtd:q,total:Math.round(p.preco*q*100)/100,status:"novo",criadoEm:now}),"Pedido enviado. Retire no estúdio.")}
 });
@@ -1125,7 +1223,7 @@ document.addEventListener("click",e=>{
   if(act==="exemplos"){run(criarExemplos,"Exemplo carregado");return}
   if(act==="apagarExemplos"){confirmSheet("Apagar exemplos","<p>Remove as turmas e os alunos marcados como exemplo, com as aulas e créditos deles.</p>",[{label:"Apagar",cls:"primary",run:()=>run(apagarExemplos,"Exemplos apagados")}]);return}
 });
-document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.dataset&&d.dataset.det==="plano")S.planoAberto=d.open},true);
+document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.dataset&&d.dataset.det==="plano")S.planoAberto=d.open;if(d&&d.dataset&&d.dataset.det==="agds")S.agdsAberto=d.open;if(d&&d.dataset&&d.dataset.det==="ferias")S.feriasAberto=d.open;if(d&&d.dataset&&d.dataset.det==="quem"){S.quemAberto=S.quemAberto||{};S.quemAberto[d.dataset.k]=d.open}},true);
 document.addEventListener("input",e=>{if(e.target.id==="busca"){S.busca=e.target.value;clearTimeout(render.t);render.t=setTimeout(render,120)}});
 document.addEventListener("change",async e=>{
   if(e.target.dataset.foto){const aid=e.target.dataset.foto;const L=FOTOS[aid]=FOTOS[aid]||[];
@@ -1148,7 +1246,7 @@ document.addEventListener("submit",e=>{
   if(k==="plano"){const id=f.dataset.aluno;const g=x=>document.getElementById(x+"_"+id).value;
     const ini=g("pl_ini"),per=g("pl_per");let fim=g("pl_fim");if(!fim&&ini&&per)fim=fimSugerido(ini,per);
     if(ini&&fim&&fim<ini){toast("A data fim precisa ser depois do início");return}
-    run(()=>db.doc("alunos/"+id).update({plano:g("pl_p"),periodo:per,inicio:ini,fim:fim,pagamento:g("pl_pag"),forma:g("pl_forma"),diaPagamento:Math.min(31,Math.max(0,parseInt(g("pl_dia"),10)||0))||"",valor:parsePreco(g("pl_val"))||"",vezesSemana:Math.min(7,Math.max(0,parseInt(g("pl_vz"),10)||0))||"",reposicoesMes:Math.max(0,parseInt(g("pl_rm"),10)||0),profFin:g("pl_pf").trim(),vencUnico:g("pl_vu"),obsFin:g("pl_ob").trim()}),"Plano salvo")}
+    run(()=>db.doc("alunos/"+id).update({plano:g("pl_p"),periodo:per,inicio:ini,fim:fim,pagamento:g("pl_pag"),forma:g("pl_forma"),diaPagamento:Math.min(31,Math.max(0,parseInt(g("pl_dia"),10)||0))||"",valor:parsePreco(g("pl_val"))||"",vezesSemana:Math.min(7,Math.max(0,parseInt(g("pl_vz"),10)||0))||"",reposicoesMes:Math.max(0,parseInt(g("pl_rm"),10)||0),profFin:g("pl_pf").trim(),vencUnico:g("pl_vu"),obsFin:g("pl_ob").trim(),modsExtra:S.cfg.modalidades.filter((m,i)=>{const el=document.getElementById("pl_mx_"+id+"_"+i);return el&&el.checked&&!el.disabled})}),"Plano salvo")}
   if(k==="novaMod"){const m=v("nm_nome").trim();if(!m)return;if(S.cfg.modalidades.includes(m)){toast("Essa modalidade já existe");return}
     run(async()=>{await salvarCfg({modalidades:[...S.cfg.modalidades,m],planos:S.cfg.planos});document.getElementById("nm_nome").value=""},"Modalidade adicionada")}
   if(k==="novoPlano"){const n=v("np_nome").trim();if(!n)return;
@@ -1160,7 +1258,7 @@ document.addEventListener("submit",e=>{
   if(k==="repor"){const aid=f.dataset.aluno;const [tid,d]=(v("rep_"+aid)||"").split("|");if(!tid)return;agendarFluxo(aid,tid,d,v("repk_"+aid),!!f.dataset.staff)}
   if(k==="espera"){const aid=f.dataset.aluno;const [tid,d]=(v("esp_"+aid)||"").split("|");if(!tid)return;
     run(()=>db.doc("espera/"+aid+"_"+tid+"_"+d).set({alunoId:aid,turmaId:tid,data:d,status:"aguardando",contatado:false,criadoEm:new Date().toISOString()}),"Você está na lista de espera")}
-  if(k==="ferias"){const aid=f.dataset.aluno,a=aluno(aid);const ini=v("fi_"+aid),fim=v("ff_"+aid);if(!a||!ini||!fim)return;
+  if(k==="ferias"){const aid=f.dataset.aluno,a=aluno(aid);const ini=v("fi_"+aid),nd=parseInt(v("fd_"+aid),10)||5,fim=ini?addDays(ini,nd-1):"";if(!a||!ini||!fim)return;
     if(fim<ini){toast("A data final precisa ser depois da inicial");return}
     const dias=diasEntre(ini,fim),resta=feriasDireito(a)-feriasUsadas(a);
     if(!f.dataset.staff&&dias>resta){toast(resta>0?`Você tem ${resta} dias de férias disponíveis. Escolha um período menor.`:"Você não tem dias de férias disponíveis no plano.");return}
@@ -1728,7 +1826,7 @@ function alunoStudio(a){
   if(!tsP.length)return h+`<div class="card empty">Seu plano não inclui horários de Studio.</div></div>`;
   const minhas=S.reservas.filter(r=>r.alunoId===a.id&&ATIVOS.includes(r.status)&&inicio(r)>now-3600e3&&ehStudio(turma(r.turmaId))).sort((x,y)=>inicio(x)-inicio(y));
   if(minhas.length){h+=`<div class="eyebrow">Suas aulas de Studio</div>`;for(const r of minhas){const t=turma(r.turmaId);
-    h+=`<div class="aula mod" style="--m:${corMod(t.modalidade)}"><span class="hora">${esc(t.hora)}</span><div class="info">${modTag(t)}<div class="name">${esc(t.nome)}</div><div class="meta">${relD(r.data)} · ${profTxt(t)}</div></div><div class="act"><button class="small" data-act="desmarcarAluno" data-id="${r.id}">Desmarcar</button></div></div>`}}
+    h+=`<div class="aula mod" style="--m:${corMod(t.modalidade)}"><span class="hora">${esc(t.hora)}</span><div class="info">${modTag(t)}<div class="name">${esc(t.nome)}</div><div class="meta">${relD(r.data)} · ${profTxt(t)}</div>${quemHtml(t.id,r.data)}</div><div class="act"><button class="small" data-act="desmarcarAluno" data-id="${r.id}">Desmarcar</button></div></div>`}}
   const opts=[];for(let i=0;i<14;i++){const d=addDays(hoje,i);if(emFerias(a,d))continue;
     for(const t of tsP){if(!(t.dias||[]).includes(wd(d)))continue;const ts=new Date(d+"T"+t.hora+":00").getTime();if(ts<=now)continue;
       if(S.reservas.some(r=>r.alunoId===a.id&&r.turmaId===t.id&&r.data===d&&CONTA.includes(r.status)))continue;
@@ -1738,7 +1836,7 @@ function alunoStudio(a){
   if(!opts.length)h+=`<div class="card empty">Nenhuma vaga de Studio nos próximos 14 dias.</div>`;
   const cd=opts.length?chipsDias(opts,"studio_"+a.id,14):null;if(cd)h+=cd.html;
   for(const o of opts.filter(x=>cd&&x.d===cd.sel)){
-    h+=`<div class="aula mod" style="--m:${corMod(o.t.modalidade)}"><span class="hora">${esc(o.t.hora)}</span><div class="info">${modTag(o.t)}<div class="name">${esc(o.t.nome)}${o.c.tipo==="reposicao"?` <span class="pill p-wait">Reposição</span>`:""}${a.profStudio&&normNome(o.t.professor)===normNome(a.profStudio)?` <span class="pill p-ok">Seu professor</span>`:""}</div><div class="meta">${profTxt(o.t)} · ${o.livres} ${o.livres===1?"vaga":"vagas"}</div></div><div class="act"><button class="small primary" data-act="agendar" data-aluno="${a.id}" data-turma="${o.t.id}" data-v="${o.d}">Agendar</button></div></div>`}
+    h+=`<div class="aula mod" style="--m:${corMod(o.t.modalidade)}"><span class="hora">${esc(o.t.hora)}</span><div class="info">${modTag(o.t)}<div class="name">${esc(o.t.nome)}${o.c.tipo==="reposicao"?` <span class="pill p-wait">Reposição</span>`:""}${a.profStudio&&normNome(o.t.professor)===normNome(a.profStudio)?` <span class="pill p-ok">Seu professor</span>`:""}</div><div class="meta">${profTxt(o.t)} · ${o.livres} ${o.livres===1?"vaga":"vagas"}</div>${quemHtml(o.t.id,o.d)}</div><div class="act"><button class="small primary" data-act="agendar" data-aluno="${a.id}" data-turma="${o.t.id}" data-v="${o.d}">Agendar</button></div></div>`}
   return h+`</div>`}
 /* ---------- contrato ---------- */
 function fmtCpf(v){const d=String(v||"").replace(/\D/g,"");return d.length===11?d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,"$1.$2.$3-$4"):String(v||"").trim()}
@@ -1849,6 +1947,13 @@ document.addEventListener("submit",async e=>{const f=e.target.closest("[data-for
     run(async()=>{await db.collection("contratos").add({alunoId:a.id,texto:p.txt,hash:h,versao:(S.contratoModelo&&S.contratoModelo.versao)||1,aceitoEm:new Date().toISOString(),aceitoPor:quem.nome,aceitoPorId:quem.id,aceitoPorResponsavel:quem.id!==a.id,planoNome:pl?pl.nome:"",dispositivo:String(navigator.userAgent||"").slice(0,200)})},"Contrato aceito e anexado ao cadastro")}
 });
 
+/* ---------- produtos: foto ---------- */
+function fotoProduto(p,sz){const u=blobUrl(p.foto);
+  return u?`<span class="plogo" style="width:${sz}px;height:${sz}px"><img src="${esc(u)}" alt="Foto de ${esc(p.nome)}" loading="lazy"></span>`:`<span class="plogo" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.3)}px" aria-hidden="true">SM</span>`}
+document.addEventListener("change",async e=>{const pid=e.target.dataset&&e.target.dataset.fotoproduto;if(!pid||!assetsNs||!db)return;const file=e.target.files&&e.target.files[0];if(!file)return;
+  const blob=await reduzirLogo(file);if(!blob){toast("Formato de foto não suportado. Use JPG ou PNG.");return}
+  run(async()=>{const r=await assetsNs.upload(blob,{type:blob.type||"image/jpeg"});await db.doc("produtos/"+pid).update({foto:r.id})},"Foto do produto salva")});
+document.addEventListener("click",e=>{const b=e.target.closest('[data-act="rmFotoProduto"]');if(!b||!db)return;run(()=>db.doc("produtos/"+b.dataset.id).update({foto:""}),"Foto removida")});
 /* ---------- parceiros: foto ---------- */
 function logoParceiro(p,sz){const u=blobUrl(p.foto);const ini=String(p.nome||"?").split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase();
   return u?`<span class="plogo" style="width:${sz}px;height:${sz}px"><img src="${esc(u)}" alt="Logo de ${esc(p.nome)}" loading="lazy"></span>`:`<span class="plogo" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.34)}px" aria-hidden="true">${esc(ini)}</span>`}
@@ -1952,7 +2057,7 @@ render();
   db.doc("config/planos").onSnapshot(s=>{if(s.exists){const d=s.data();S.cfg={modalidades:Array.isArray(d.modalidades)?d.modalidades:[],planos:Array.isArray(d.planos)?d.planos:[],cores:d.cores&&typeof d.cores==="object"?d.cores:{}}}render()},fail);
   db.doc("config/regras").onSnapshot(s=>{if(s.exists)S.regras=Object.assign({minutosDesmarcar:30,nome:""},s.data());S.regrasOk=true;render();setTimeout(()=>autoFixos(),1500)},fail);
   setInterval(()=>autoFixos(),10*60e3);
-  if(ROLE==="aluno"){carregarOcupacao();setInterval(carregarOcupacao,60000)}
+  if(ROLE==="aluno"){carregarOcupacao();carregarQuem();setInterval(()=>{carregarOcupacao();carregarQuem()},60000)}
   setInterval(()=>{if(!S.busy&&!document.querySelector("input:focus,select:focus"))render()},60000);
 })();
 };
