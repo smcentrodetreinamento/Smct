@@ -117,6 +117,12 @@ input[type=date]{-webkit-appearance:none;appearance:none;display:block;max-width
 .sheet{background:var(--bg);width:100%;max-width:640px;max-height:92%;overflow:auto;border-radius:18px 18px 0 0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px calc(20px + env(safe-area-inset-bottom,0px));display:grid;gap:14px}
 @media (min-width:700px){.sheet-bg{align-items:center}.sheet{border-radius:18px}}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;z-index:30;font-weight:600;max-width:calc(100% - 32px);box-shadow:var(--shadow)}
+.tdots{display:flex;gap:6px;margin:4px 0 2px}.tdot{width:14px;height:14px;border-radius:50%;border:2px solid var(--gold,#C9A86A);opacity:.55}.tdot.on{background:var(--gold,#C9A86A);opacity:1}
+.mini-como{margin-top:10px}.mini-como summary{cursor:pointer;color:var(--accent-hi,#E5BF94);font-size:14px;font-weight:500}
+.como{margin:8px 0 0;padding-left:18px;display:grid;gap:6px;font-size:14px;line-height:1.4}
+.mais-lista{padding:4px}.mais-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid rgba(255,255,255,.08);padding:14px 10px;color:inherit;cursor:pointer;font:inherit;min-height:0}
+.mais-item:last-child{border-bottom:0}.mais-ic{font-size:22px;width:32px;text-align:center}.chev-r{font-size:22px;opacity:.5}
+.voltar-mais{margin-bottom:10px;padding-left:0}
 .stats{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
 .stat{display:grid;gap:2px;align-content:start;background:var(--sunk);border-radius:12px;padding:10px 12px}
 .mod{--m:var(--accent)}
@@ -864,7 +870,7 @@ function painelAluno(a,modo){
     for(const r of prox){const t=turma(r.turmaId)||{};const dl=DIAS_LONGO[wd(r.data)];const prox7=r.data>addDays(iniSem,6);
       h+=`<div class="agd mod" style="--m:${corMod(t.modalidade)}"><div class="agd-l"><span class="agd-dia">${dl.charAt(0).toUpperCase()+dl.slice(1)}${prox7?`<small>próx. semana</small>`:""}</span><span class="agd-txt"><b>${esc(t.hora||"")}</b> ${esc(t.modalidade?cap(t.modalidade):t.nome||"Aula")}${r.tipo==="reposicao"?` <span class="pill p-wait">Reposição</span>`:""}</span><span class="prof">${t.professor?`com <b>${esc(t.professor)}</b>`:""}${Number(r.criancas)>0?` · ${r.criancas} na brinquedoteca`:""}</span>${quemHtml(r.turmaId,r.data)}</div><div class="agd-r"><details class="mini"><summary aria-label="Opções">···</summary><div class="stack" style="gap:8px;padding-top:8px">${kidsSel("rk_"+r.id,r.criancas,r.id)}</div></details><button class="small" data-act="${staff?"desmarcarStaff":"desmarcarAluno"}" data-id="${r.id}">Desmarcar</button></div></div>`}
     h+=`</div>`}
-  h+=`<div class="meta">Você não precisa confirmar: está agendado, é só vir. Desmarcando até ${prazoTxt()} antes, você ganha 1 crédito para repor a aula.</div></div></details>`;
+  h+=`<div class="meta">Não precisa confirmar: está agendado, é só vir. Quer trocar de dia ou horário? É livre: desmarque e agende outro.</div></div></details>`;
   // reposição e lista de espera
   const opts=[],cheias=[];for(let i=0;i<14;i++){const d=addDays(hoje,i);if(emFerias(a,d))continue;
     for(const t of S.turmas){if(!(t.dias||[]).includes(wd(d))||inativa(t,d))continue;const ts=new Date(d+"T"+t.hora+":00").getTime();if(ts<=now)continue;
@@ -916,14 +922,31 @@ function painelAluno(a,modo){
 
 function temaPlano(p){const n=normNome(p&&p.nome);if(!n)return"";if(n.includes("standard"))return"pl-standard";if(n.includes("full pass")||n.includes("fullpass")||n.includes("full"))return"pl-full";if(n.includes("moviment")||n.includes("movement"))return"pl-moviment";if(n.includes("black space")||n.includes("blackspace"))return"pl-space";if(n.includes("black"))return"pl-black";if(n.includes("basic"))return"pl-basic";if(n.includes("promo"))return"pl-promo";return""}
 function cardTreino(a){
-  const hoje=ds(new Date()),v=vezes(a),k=aulasNaSemana(a.id,hoje),cr=saldo(a.id),fe=saldoFerias(a.id),us=repNoMes(a.id,hoje),lim=limiteRep(a);
+  const hoje=ds(new Date()),v=vezes(a),k=aulasNaSemana(a.id,hoje),cr=saldo(a.id),fe=Math.max(0,saldoFerias(a.id)),us=repNoMes(a.id,hoje),lim=limiteRep(a);
   const mes=new Date().toLocaleDateString("pt-BR",{month:"long"});
-  const stat=(rot,val,sub,cls)=>`<div class="stat"><div class="eyebrow">${rot}</div><div class="saldo ${cls||""}" style="font-size:30px">${val}</div><div class="meta">${sub}</div></div>`;
-  return `<div class="card treino"><div class="row between"><h3>Meu treino</h3>${v?`<span class="pill p-acc">${v}x por semana</span>`:`<span class="pill p-neutral">Frequência não definida</span>`}</div>
-  <div class="stats">${stat("Esta semana",v?`${k}<span class="meta" style="font-size:16px"> / ${v}</span>`:k,v?(k>=v?"semana completa; a próxima aula é reposição":`${v-k} ${v-k===1?"aula":"aulas"} ainda dentro do plano`):"aulas agendadas")}
-  ${stat("Créditos de reposição",cr,cr===1?"aula desmarcada para repor":"aulas desmarcadas para repor",cr<0?"minus":"")}
-  ${stat("Reposições em "+mes,`${us}<span class="meta" style="font-size:16px"> / ${lim}</span>`,us>=lim?"limite do mês atingido":`${lim-us} ainda ${lim-us===1?"disponível":"disponíveis"}`)}
-  ${stat("Créditos de férias",fe,fe?"pode usar quando passar do limite de reposições":"gerados quando você avisa férias")}</div></div>`}
+  const restMes=Math.max(0,lim-us),porCred=Math.min(Math.max(cr,0),restMes),pode=porCred+fe;
+  const pl=(n,um,varios)=>n+" "+(n===1?um:varios);
+  // esta semana
+  let sem;
+  if(v){const dots=Array.from({length:v},(_,i)=>`<span class="tdot ${i<k?"on":""}"></span>`).join("");
+    sem=`<div class="stat"><div class="eyebrow">Esta semana</div><div class="saldo" style="font-size:30px">${Math.min(k,v)}<span class="meta" style="font-size:16px"> de ${v} aulas</span></div><div class="tdots" aria-hidden="true">${dots}</div><div class="meta">${k>=v?`Semana completa! Uma aula a mais nesta semana conta como reposição.`:`Você ainda pode agendar ${pl(v-k,"aula","aulas")} nesta semana, no dia e horário que quiser.`}</div></div>`}
+  else sem=`<div class="stat"><div class="eyebrow">Esta semana</div><div class="saldo" style="font-size:30px">${k}</div><div class="meta">${k===1?"aula agendada":"aulas agendadas"}</div></div>`;
+  // reposições
+  let porque;
+  if(pode)porque=`É só agendar um horário com vaga. A aula extra usa 1 reposição.`;
+  else if(cr>0&&restMes===0)porque=`Você já usou as ${lim} reposições de ${mes}. No mês que vem libera de novo.`;
+  else porque=`Desmarque com até ${prazoTxt()} de antecedência para ganhar uma reposição.`;
+  const rep=`<div class="stat"><div class="eyebrow">Aulas para repor</div><div class="saldo" style="font-size:30px">${pode}</div><div class="meta">${porque}</div></div>`;
+  let h=`<div class="card treino"><div class="row between"><h3>Meu treino</h3>${v?`<span class="pill p-acc">${v}x por semana</span>`:""}</div><div class="stats">${sem}${rep}</div>`;
+  if(cr<0)h+=`<div class="why meta">Você fez ${pl(-cr,"aula a mais","aulas a mais")} que o plano. ${-cr===1?"Ela será compensada":"Elas serão compensadas"} na próxima vez que você desmarcar.</div>`;
+  h+=`<details class="mini-como"><summary>Como funcionam as reposições?</summary><ul class="como">
+    <li><b>Trocar de dia ou horário é livre.</b> Desmarque e agende outro horário quando quiser.</li>
+    <li>${v?`Seu plano é de <b>${v}x por semana</b>. Só conta como reposição se você treinar <b>mais de ${v} vezes</b> na mesma semana.`:`Só conta como reposição se você treinar mais vezes na semana do que o seu plano.`}</li>
+    <li>Para essa aula a mais, você usa 1 reposição. Desmarcou até <b>${prazoTxt()}</b> antes? Você ganha 1.</li>
+    <li>Você pode fazer até <b>${lim} reposições por mês</b>. Em ${mes} já usou <b>${us}</b>.</li>
+    <li>Reposições guardadas agora: <b>${Math.max(cr,0)}</b>${fe?` + <b>${fe}</b> de férias`:""}.</li>
+    <li>Ao avisar férias, as aulas daquele período viram <b>reposições de férias</b>, que valem mesmo depois do limite do mês.</li></ul></details></div>`;
+  return h}
 
 function cardPlano(a,staff){
   const p=planoDe(a);const hoje=ds(new Date());const venc=a.fim&&a.fim<hoje;const pg=proxPagamento(a);
@@ -978,9 +1001,15 @@ function vAluno(){
   for(const e of abriu){const t=turma(e.turmaId);h+=`<div class="card" style="border-color:var(--good)"><div class="row between"><div class="grow"><div class="eyebrow" style="color:var(--good)">Abriu vaga</div><div class="name">${esc(t.nome)} · ${relD(e.data)} às ${esc(t.hora)}</div></div><button class="primary small" data-act="pegarVaga" data-id="${e.id}">Pegar a vaga</button></div></div>`}
   const nv=diasAteNiver(a);if(nv===0)h+=`<div class="note">Feliz aniversário, ${esc(a.nome.split(" ")[0])}! Que seu novo ano seja cheio de saúde e movimento.</div>`;
   const nAv=avisosAtivos().filter(x=>x.importante).length;
-  const subs=[["aulas","Minhas aulas"],["studio","Studio"],["avisos","Avisos"+(nAv?` <span class="badge">${nAv}</span>`:"")],["professor","Falar com professor"],["parceiros","Parceiros"],["loja","Loja"],["contrato","Contrato"+(contratoStatus(a).ok?"":` <span class="badge">!</span>`)]];
-  h+=`<div class="tabrow" role="tablist" aria-label="Área do aluno">${subs.map(([k,l])=>`<button class="tab" role="tab" aria-selected="${S.subAluno===k}" data-act="subAluno" data-v="${k}">${l}</button>`).join("")}</div>`;
-  const F={aulas:()=>painelAluno(a,"aluno"),studio:()=>alunoStudio(a),avisos:()=>alunoAvisos(a),professor:()=>alunoProfessor(a),parceiros:alunoParceiros,loja:()=>alunoLoja(a),contrato:()=>alunoContrato(a,eu)}[S.subAluno]||(()=>painelAluno(a,"aluno"));
+  const ctOk=contratoStatus(a).ok;
+  const MAIS=["mais","studio","loja","parceiros","contrato"];
+  const subs=[["aulas","Aulas"],["avisos","Avisos"+(nAv?` <span class="badge">${nAv}</span>`:"")],["professor","Professor"],["mais","Mais"+(ctOk?"":` <span class="badge">!</span>`)]];
+  const selTab=MAIS.includes(S.subAluno)?"mais":S.subAluno;
+  h+=`<div class="tabrow" role="tablist" aria-label="Área do aluno">${subs.map(([k,l])=>`<button class="tab" role="tab" aria-selected="${selTab===k}" data-act="subAluno" data-v="${k}">${l}</button>`).join("")}</div>`;
+  const voltar=`<button class="small ghost voltar-mais" data-act="subAluno" data-v="mais">‹ Voltar</button>`;
+  const menuMais=()=>{const it=(k,ic,t,d,extra)=>`<button class="mais-item" data-act="subAluno" data-v="${k}"><span class="mais-ic" aria-hidden="true">${ic}</span><span class="grow"><span class="name">${t}</span><br><span class="meta">${d}</span></span>${extra||""}<span class="chev-r" aria-hidden="true">›</span></button>`;
+    return `<div class="stack"><h2>Mais</h2><div class="card mais-lista">${it("contrato","📄","Contrato","Leia e aceite o contrato do seu plano",ctOk?`<span class="pill p-ok">Aceito</span>`:`<span class="pill p-wait">Pendente</span>`)}${it("studio","🏋️","Studio","Seu professor e horários de treino no Studio")}${it("loja","🛍️","Loja SM|STORE","Produtos do estúdio")}${it("parceiros","🤝","Parceiros","Descontos e parceiros do SM|CT")}</div></div>`};
+  const F={aulas:()=>(ctOk?"":`<div class="note row between" style="margin-bottom:12px"><span class="grow">Falta aceitar o seu contrato.</span><button class="small primary" data-act="subAluno" data-v="contrato">Ver contrato</button></div>`)+painelAluno(a,"aluno"),mais:menuMais,studio:()=>voltar+alunoStudio(a),avisos:()=>alunoAvisos(a),professor:()=>alunoProfessor(a),parceiros:()=>voltar+alunoParceiros(),loja:()=>voltar+alunoLoja(a),contrato:()=>voltar+alunoContrato(a,eu)}[S.subAluno]||(()=>painelAluno(a,"aluno"));
   return h+`<div class="area-aluno">${F()}</div>`}
 
 /* ---------- comunicação ---------- */
