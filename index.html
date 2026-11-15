@@ -117,7 +117,8 @@ input[type=date]{-webkit-appearance:none;appearance:none;display:block;max-width
 .sheet{background:var(--bg);width:100%;max-width:640px;max-height:92%;overflow:auto;border-radius:18px 18px 0 0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px calc(20px + env(safe-area-inset-bottom,0px));display:grid;gap:14px}
 @media (min-width:700px){.sheet-bg{align-items:center}.sheet{border-radius:18px}}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;z-index:30;font-weight:600;max-width:calc(100% - 32px);box-shadow:var(--shadow)}
-.tdots{display:flex;gap:6px;margin:4px 0 2px}.tdot{width:14px;height:14px;border-radius:50%;border:2px solid var(--gold,#C9A86A);opacity:.55}.tdot.on{background:var(--gold,#C9A86A);opacity:1}
+.tdots{display:flex;gap:6px;margin:4px 0 2px}.tdot{width:14px;height:14px;border-radius:50%;border:2px solid var(--gold,#C9A86A);opacity:.55}.barra{height:6px;border-radius:99px;background:rgba(201,168,106,.2);overflow:hidden;margin:4px 0 2px}.barra>span{display:block;height:100%;background:var(--gold,#C9A86A);border-radius:99px}
+.tdot.on{background:var(--gold,#C9A86A);opacity:1}
 .mini-como{margin-top:10px}.mini-como summary{cursor:pointer;color:var(--accent-hi,#E5BF94);font-size:14px;font-weight:500}
 .como{margin:8px 0 0;padding-left:18px;display:grid;gap:6px;font-size:14px;line-height:1.4}
 .mais-lista{padding:4px}.mais-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid rgba(255,255,255,.08);padding:14px 10px;color:inherit;cursor:pointer;font:inherit;min-height:0}
@@ -813,7 +814,13 @@ function vContatar(){
   else{h+=`<div class="card"><div class="list">`;for(const {a,dias} of N){const [,m,d]=a.nascimento.split("-");
     h+=`<div class="item"><div class="grow"><div class="name">${esc(a.nome)}</div><div class="meta">${d}/${m} · ${dias===0?"é hoje":dias===1?"amanhã":"em "+dias+" dias"}</div></div>${dias===0?`<div class="row">${contatoBtns(a,`Feliz aniversário, ${a.nome.split(" ")[0]}! 🎉 Toda a equipe ${S.regras.nome?"do "+S.regras.nome+" ":""}deseja um ano incrível, com muita saúde e movimento. Um abraço!`)}<button class="small ghost" data-act="parabens" data-id="${a.id}">Enviei</button></div>`:`<span class="pill p-neutral">${dias===1?"Amanhã":"Em breve"}</span>`}</div>`}
     h+=`</div></div>`}
-  return h+`</div>`}
+  h+=`</div>`;
+  const AS=anivStudioSemana();
+  if(AS.length){h+=`<div class="stack"><div class="row between"><h2>Aniversário de studio</h2><span class="sub">Tempo de casa, hoje e próximos 7 dias</span></div><div class="card"><div class="list">`;
+    for(const {a,x} of AS){const nm=a.nome.split(" ")[0];
+      h+=`<div class="item"><div class="grow"><div class="name">${esc(a.nome)}</div><div class="meta">${x.anos} ${x.anos===1?"ano":"anos"} de ${esc(S.regras.nome||"studio")} · ${fmtFull(x.data).slice(0,5)} · ${x.dias===0?"é hoje":x.dias===1?"amanhã":"em "+x.dias+" dias"}</div></div>${x.dias===0?`<div class="row">${contatoBtns(a,`Oi ${nm}! Hoje faz ${x.anos} ${x.anos===1?"ano":"anos"} que você treina com a gente 🎉 Obrigado pela confiança e por fazer parte ${S.regras.nome?"do "+S.regras.nome:"da nossa família"}. Bora pra mais um ano!`)}<button class="small ghost" data-act="parabensStudio" data-id="${a.id}">Enviei</button></div>`:`<span class="pill p-neutral">${x.dias===1?"Amanhã":"Em breve"}</span>`}</div>`}
+    h+=`</div></div></div>`}
+  return h}
 
 function emptyStart(){if(ROLE!=="admin")return `<div class="card empty">Ainda não há turmas cadastradas.</div>`;return `<div class="card empty"><h3>Comece cadastrando turmas e alunos</h3><span>Crie suas turmas em Ajustes e os alunos em Alunos. Se quiser ver como funciona antes, carregue dados de exemplo (dá para apagar depois).</span><div class="row"><button class="primary small" data-act="exemplos">Carregar exemplo</button><button class="small" data-act="tab" data-v="ajustes">Criar turmas</button></div></div>`}
 
@@ -862,6 +869,7 @@ function painelAluno(a,modo){
   const staff=modo==="staff";const n=saldo(a.id);const now=Date.now();const hoje=ds(new Date());
   const prox=S.reservas.filter(r=>r.alunoId===a.id&&ATIVOS.includes(r.status)&&inicio(r)>now-3600e3).sort((x,y)=>inicio(x)-inicio(y));
   let h=staff&&telDe(a)?contatoBtns(a,`Oi ${a.nome.split(" ")[0]}!`):"";
+  h+=cardVisao(a,staff);
   h+=cardTreino(a);
   h+=cardPlano(a,staff);
   const p1=prox[0],t1=p1?turma(p1.turmaId)||{}:null;
@@ -919,8 +927,42 @@ function painelAluno(a,modo){
     h+=cardMatricula(a);
     h+=cardContratoStaff(a);
     h+=`<div class="card"><div class="row">${avatar(a,64)}<div class="grow"><h3>Foto</h3>${fotoBtn(a,a.foto?"Trocar foto":"Adicionar foto")}</div></div></div>`;
-    h+=`<div class="card"><h3>Dados</h3><form class="formgrid" data-form="editAluno" data-aluno="${a.id}"><label>Nome<input id="en_${a.id}" value="${esc(a.nome)}" required></label><label>WhatsApp<input id="et_${a.id}" value="${esc(a.telefone||"")}" inputmode="tel"></label><label>Nascimento<input id="eb_${a.id}" type="date" value="${esc(a.nascimento||"")}"></label><label>E-mail<input id="em_${a.id}" type="email" value="${esc(a.email||"")}" placeholder="nome@email.com"></label><label>CPF<input id="ec_${a.id}" value="${esc(a.cpf||"")}" inputmode="numeric" placeholder="000.000.000-00"></label><label style="grid-column:1/-1">Endereço<input id="ed_${a.id}" value="${esc(a.endereco||"")}" placeholder="Rua, número, bairro, cidade"></label><label>Professor responsável (treino)<input id="eps_${a.id}" list="profs_dl" value="${esc(a.profStudio||"")}" placeholder="Nenhum"><datalist id="profs_dl">${professores().map(p=>`<option value="${esc(p)}">`).join("")}</datalist></label><label>Responsável (se for menor)<select id="er_${a.id}"><option value="">Nenhum</option>${S.alunos.filter(x=>x.id!==a.id&&x.responsavelId!==a.id).sort((x,y)=>x.nome.localeCompare(y.nome)).map(x=>`<option value="${x.id}" ${a.responsavelId===x.id?"selected":""}>${esc(x.nome)}</option>`).join("")}</select></label><div style="display:flex;align-items:end;gap:8px"><button class="small" style="flex:1">Salvar</button><button type="button" class="small danger" data-act="excluirAluno" data-id="${a.id}">Excluir</button></div></form></div>`}
+    h+=`<div class="card"><h3>Dados</h3><form class="formgrid" data-form="editAluno" data-aluno="${a.id}"><label>Nome<input id="en_${a.id}" value="${esc(a.nome)}" required></label><label>WhatsApp<input id="et_${a.id}" value="${esc(a.telefone||"")}" inputmode="tel"></label><label>Nascimento<input id="eb_${a.id}" type="date" value="${esc(a.nascimento||"")}"></label><label>E-mail<input id="em_${a.id}" type="email" value="${esc(a.email||"")}" placeholder="nome@email.com"></label><label>CPF<input id="ec_${a.id}" value="${esc(a.cpf||"")}" inputmode="numeric" placeholder="000.000.000-00"></label><label>Entrou no studio em<input id="ee_${a.id}" type="date" value="${esc(a.entrada||entradaDe(a))}"></label><label style="grid-column:1/-1">Endereço<input id="ed_${a.id}" value="${esc(a.endereco||"")}" placeholder="Rua, número, bairro, cidade"></label><label>Professor responsável (treino)<input id="eps_${a.id}" list="profs_dl" value="${esc(a.profStudio||"")}" placeholder="Nenhum"><datalist id="profs_dl">${professores().map(p=>`<option value="${esc(p)}">`).join("")}</datalist></label><label>Responsável (se for menor)<select id="er_${a.id}"><option value="">Nenhum</option>${S.alunos.filter(x=>x.id!==a.id&&x.responsavelId!==a.id).sort((x,y)=>x.nome.localeCompare(y.nome)).map(x=>`<option value="${x.id}" ${a.responsavelId===x.id?"selected":""}>${esc(x.nome)}</option>`).join("")}</select></label><div style="display:flex;align-items:end;gap:8px"><button class="small" style="flex:1">Salvar</button><button type="button" class="small danger" data-act="excluirAluno" data-id="${a.id}">Excluir</button></div></form></div>`}
   return h}
+
+/* ---------- visão geral do aluno ---------- */
+function entradaDe(a){if(a.entrada)return a.entrada;const c=[a.criadoEm?String(a.criadoEm).slice(0,10):"",a.inicio||""].filter(Boolean).sort();return c[0]||""}
+function tempoDeCasa(ini){if(!ini)return"";const a=new Date(ini+"T12:00:00"),b=new Date(ds(new Date())+"T12:00:00");let m=(b.getFullYear()-a.getFullYear())*12+b.getMonth()-a.getMonth();if(b.getDate()<a.getDate())m--;
+  if(m<1){const d=Math.max(0,Math.round((b-a)/864e5));return d+(d===1?" dia":" dias")}const y=Math.floor(m/12),r=m%12;return [y?y+(y===1?" ano":" anos"):"",r?r+(r===1?" mês":" meses"):""].filter(Boolean).join(" e ")}
+function proxAnivStudio(ini){if(!ini)return null;const [y,m,d]=ini.split("-").map(Number);const hoje=new Date(ds(new Date())+"T12:00:00");
+  let n=new Date(hoje.getFullYear(),m-1,d,12);if(n<hoje)n=new Date(hoje.getFullYear()+1,m-1,d,12);const anos=n.getFullYear()-y;if(anos<1)n=new Date(y+1,m-1,d,12);
+  return {data:ds(n),anos:Math.max(1,n.getFullYear()-y),dias:Math.round((n-hoje)/864e5)}}
+function treinou(r,now){return r.status==="presente"||(ATIVOS.includes(r.status)&&inicio(r)+3600e3<=now)}
+function freqMes(aid,ym){const now=Date.now();const L=S.reservas.filter(r=>r.alunoId===aid&&String(r.data).slice(0,7)===ym);
+  return {treinos:L.filter(r=>treinou(r,now)).length,faltas:L.filter(r=>r.status==="falta").length,desm:L.filter(r=>r.status==="desmarcado").length}}
+function ultimoTreino(aid){const now=Date.now();let u=null;for(const r of S.reservas)if(r.alunoId===aid&&treinou(r,now)&&(!u||r.data>u))u=r.data;return u}
+function riscoEvasao(a){const hoje=ds(new Date());const u=ultimoTreino(a.id);const sem=u?diasAte(u)*-1:null;const ym=hoje.slice(0,7);const f=freqMes(a.id,ym);
+  const v=vezes(a)||2;const diaMes=Number(hoje.slice(8,10));const esperado=Math.max(1,Math.round(v*diaMes/7));
+  let pts=0;pts+=sem===null?35:Math.min(45,Math.max(0,sem-3)*2.5);pts+=Math.max(0,1-f.treinos/esperado)*30;pts+=Math.min(15,f.faltas*6+f.desm*2);
+  if(a.fim&&a.fim<hoje)pts+=10;const n=Math.round(Math.min(100,pts));return {n,cls:n>=60?"p-bad":n>=35?"p-wait":"p-ok",txt:n>=60?"Alto":n>=35?"Atenção":"Baixo"}}
+function cardVisao(a,staff){
+  const hoje=ds(new Date()),ym=hoje.slice(0,7);const dAnt=new Date(hoje+"T12:00:00");dAnt.setDate(1);dAnt.setMonth(dAnt.getMonth()-1);const ymAnt=ds(dAnt).slice(0,7);
+  const f=freqMes(a.id,ym),fa=freqMes(a.id,ymAnt);const mes=new Date().toLocaleDateString("pt-BR",{month:"long"});const mesAnt=dAnt.toLocaleDateString("pt-BR",{month:"long"});
+  const v=vezes(a);const diaMes=Number(hoje.slice(8,10));const ultDia=new Date(dAnt.getFullYear(),dAnt.getMonth()+2,0).getDate();const meta=v?Math.round(v*ultDia/7):0;
+  const ent=entradaDe(a);const an=proxAnivStudio(ent);const u=ultimoTreino(a.id);const sem=u?-diasAte(u):null;
+  const st=(eb,val,sub,extra)=>`<div class="stat"><div class="eyebrow">${eb}</div><div class="saldo" style="font-size:30px">${val}</div>${extra||""}<div class="meta">${sub}</div></div>`;
+  let h=`<div class="card visao"><div class="row between"><h3>${staff?"Visão geral":"Seu resumo"}</h3>${ent?`<span class="pill p-acc">Aluno desde ${fmtFull(ent)}</span>`:""}</div><div class="stats">`;
+  const pct=meta?Math.min(100,Math.round(f.treinos/meta*100)):0;
+  h+=st(`Treinos em ${mes}`,`${f.treinos}${meta?`<span class="meta" style="font-size:16px"> de ~${meta}</span>`:""}`,`${mesAnt.charAt(0).toUpperCase()+mesAnt.slice(1)}: ${fa.treinos} ${fa.treinos===1?"treino":"treinos"}`,meta?`<div class="barra" aria-hidden="true"><span style="width:${pct}%"></span></div>`:"");
+  h+=st("Último treino",u?u.slice(8,10)+"/"+u.slice(5,7):"—",u?(sem===0?"hoje":sem===1?"ontem":`há ${sem} dias`):"Nenhum treino registrado",u&&sem>=10?`<span class="pill p-bad" style="justify-self:start">${sem} dias sem vir</span>`:"");
+  h+=st("Aniversário de studio",ent?tempoDeCasa(ent):"—",an?(an.dias===0?`<b>É hoje! ${an.anos} ${an.anos===1?"ano":"anos"} de casa 🎉</b>`:`${an.anos} ${an.anos===1?"ano":"anos"} em ${fmtFull(an.data)} · faltam ${an.dias} ${an.dias===1?"dia":"dias"}`):staff?"Informe a data de entrada em Dados":"");
+  if(staff){const rk=riscoEvasao(a);
+    h+=st(`Faltas e desmarques`,`${f.faltas+f.desm}`,`${f.faltas} ${f.faltas===1?"falta":"faltas"} · ${f.desm} ${f.desm===1?"desmarcada":"desmarcadas"} em ${mes}`);
+    h+=st("Risco de evasão",`${rk.n}<span class="meta" style="font-size:16px">/100</span>`,"Pela frequência, faltas e dias sem treinar",`<span class="pill ${rk.cls}" style="justify-self:start">${rk.txt}</span>`)}
+  h+=`</div>`;
+  if(!staff&&f.treinos)h+=`<div class="meta">Você já treinou ${f.treinos} ${f.treinos===1?"vez":"vezes"} em ${mes}. Continue assim!</div>`;
+  return h+`</div>`}
+function anivStudioSemana(){const ano=new Date().getFullYear();return S.alunos.map(a=>({a,x:proxAnivStudio(entradaDe(a))})).filter(o=>o.x&&o.x.dias<=7&&!(o.x.dias===0&&o.a.parabensStudio===ano)).sort((p,q)=>p.x.dias-q.x.dias)}
 
 function temaPlano(p){const n=normNome(p&&p.nome);if(!n)return"";if(n.includes("standard"))return"pl-standard";if(n.includes("full pass")||n.includes("fullpass")||n.includes("full"))return"pl-full";if(n.includes("moviment")||n.includes("movement"))return"pl-moviment";if(n.includes("black space")||n.includes("blackspace"))return"pl-space";if(n.includes("black"))return"pl-black";if(n.includes("basic"))return"pl-basic";if(n.includes("promo"))return"pl-promo";return""}
 function cardTreino(a){
@@ -1184,7 +1226,7 @@ function render(){
   document.querySelectorAll("nav .tab").forEach(b=>{b.hidden=!TABS.includes(b.dataset.tab);b.setAttribute("aria-selected",String(b.dataset.tab===S.tab))});
   document.querySelector("nav.tabs").hidden=TABS.length<2;
   const nCom=S.mensagens.filter(m=>m.status==="novo").length+S.pedidos.filter(p=>p.status==="novo").length;const bc=document.getElementById("badgeCom");bc.hidden=!nCom;bc.textContent=nCom;
-  const nC=paraContatar().length+vagasLiberadas().length+aniversariantes().filter(x=>x.dias===0).length+renovacoes().length;const bd=document.getElementById("badgeContatar");bd.hidden=!nC;bd.textContent=nC;
+  const nC=paraContatar().length+vagasLiberadas().length+aniversariantes().filter(x=>x.dias===0).length+anivStudioSemana().filter(x=>x.x.dias===0).length+renovacoes().length;const bd=document.getElementById("badgeContatar");bd.hidden=!nC;bd.textContent=nC;
   document.getElementById("studioName").textContent=S.regras.nome||"SM|CT";
   const d=new Date();document.getElementById("todayLine").textContent=DIAS_LONGO[d.getDay()]+", "+d.toLocaleDateString("pt-BR",{day:"numeric",month:"long"});
   const ready=Object.values(S.loaded).every(Boolean);
@@ -1250,6 +1292,7 @@ document.addEventListener("click",e=>{
     agendarFluxo(ev.alunoId,ev.turmaId,ev.data,0,S.tab!=="aluno");return}
   if(act==="esperaContatado"){run(()=>db.doc("espera/"+id).update({contatado:true,contatadoEm:new Date().toISOString()}),"Marcado como avisado");return}
   if(act==="sairEspera"){run(()=>db.doc("espera/"+id).delete(),"Saiu da lista de espera");return}
+  if(act==="parabensStudio"){run(()=>db.doc("alunos/"+id).update({parabensStudio:new Date().getFullYear()}),"Parabéns registrado");return}
   if(act==="parabens"){run(()=>db.doc("alunos/"+id).update({parabensAno:new Date().getFullYear()}),"Parabéns registrado");return}
   if(act==="inativarDia"){if(ROLE!=="admin")return;const t=turma(id);if(!t)return;const d=b.dataset.v;const L=Object.assign({},t.inativoDias||{});const on=!L[d];if(on)L[d]=true;else delete L[d];
     run(()=>db.doc("turmas/"+id).update({inativoDias:L}),on?"Horário inativado neste dia":"Horário reativado neste dia");return}
@@ -1316,7 +1359,7 @@ document.addEventListener("submit",e=>{
   if(k==="fixos"){const aid=f.dataset.aluno;const fx=S.turmas.filter(t=>{const el=document.getElementById("fx_"+aid+"_"+t.id);return el&&el.checked}).map(t=>t.id);
     run(async()=>{await db.doc("alunos/"+aid).update({fixos:fx});const a=aluno(aid);if(a)a.fixos=fx;await limparFixosRemovidos(aid,fx);return autoOn()?await lancarFixos(diasFixos(),aid):0},
       n=>autoOn()?`Horários fixos salvos${n?`: ${n} ${n===1?"aula gerada":"aulas geradas"} nos próximos ${diasFixos()} dias`:""}`:"Horários fixos salvos. Use “Lançar horários fixos” na Agenda.")}
-  if(k==="editAluno"){const aid=f.dataset.aluno;const nome=v("en_"+aid).trim();if(!nome)return;run(()=>db.doc("alunos/"+aid).update({nome,telefone:v("et_"+aid).trim(),nascimento:v("eb_"+aid)||"",responsavelId:v("er_"+aid)||"",cpf:fmtCpf(v("ec_"+aid)),email:(v("em_"+aid)||"").trim(),endereco:v("ed_"+aid).trim(),profStudio:(v("eps_"+aid)||"").trim()}),"Dados salvos")}
+  if(k==="editAluno"){const aid=f.dataset.aluno;const nome=v("en_"+aid).trim();if(!nome)return;run(()=>db.doc("alunos/"+aid).update({nome,telefone:v("et_"+aid).trim(),nascimento:v("eb_"+aid)||"",responsavelId:v("er_"+aid)||"",cpf:fmtCpf(v("ec_"+aid)),email:(v("em_"+aid)||"").trim(),endereco:v("ed_"+aid).trim(),profStudio:(v("eps_"+aid)||"").trim(),entrada:v("ee_"+aid)||""}),"Dados salvos")}
 });
 
 async function salvarCfg(c){await db.doc("config/planos").set({modalidades:c.modalidades,planos:c.planos,cores:Object.assign({},S.cfg.cores||{},c.cores||{})})}
