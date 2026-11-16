@@ -499,7 +499,7 @@ const DIAS_LONGO=["domingo","segunda","terça","quarta","quinta","sexta","sábad
 const ATIVOS=["agendado","confirmado"];
 const PERIODOS={mensal:["Mensal",1],trimestral:["Trimestral",3],semestral:["Semestral",6],anual:["Anual",12]};
 const FORMAS=["Pix","Pix Sicoob","Cartão","Cartão de crédito","Cartão recorrente","Recorrente InfinitePay","Cartão de débito","Dinheiro","Sicoob","Boleto","Transferência"];
-const S={alunos:[],turmas:[],reservas:[],movs:[],espera:[],cfg:{modalidades:[],planos:[]},regras:{minutosDesmarcar:30,nome:""},
+const S={alunos:[],turmas:[],reservas:[],movs:[],espera:[],cfg:{modalidades:[],planos:[]},regras:{minutosDesmarcar:30,nome:""},msgs:{},
   avisos:[],mensagens:[],treinos:[],metodo:null,pagamentos:[],contas:[],materiais:[],eventos:[],eventoItens:[],comissoes:[],aulasProf:[],entradas:[],ponto:[],vendas:[],equipe:{},finCfg:{},finMes:null,finSub:"resumo",finFiltro:"todos",iaBusy:null,todosTreinos:{},monPag:0,profSub:"horarios",profVer:"minhas",prof:null,contratos:[],contratoModelo:null,parceiros:[],produtos:[],pedidos:[],subAluno:"aulas",subCom:"mensagens",
   loaded:{alunos:false,turmas:false,reservas:false,movs:false,espera:false},
   tab:"contatar",dia:ds(new Date()),busca:"",meu:null,sheet:null,busy:false};
@@ -570,7 +570,7 @@ function modTag(t){return t&&t.modalidade?`<span class="modtag">${esc(t.modalida
 function profTxt(t){return t&&t.professor?`<span class="prof">com <b>${esc(t.professor)}</b></span>`:`<span class="prof">Professor a definir</span>`}
 function digits(p){return String(p||"").replace(/\D/g,"")}
 function waLink(a,r){let d=digits(telDe(a));if(!d)return null;if(d.length<=11)d="55"+d;
-  const t=r&&turma(r.turmaId);const msg=r&&t?`Oi ${a.nome.split(" ")[0]}! Tudo bem? Você vem na aula de ${t.nome} ${relD(r.data)} às ${t.hora}?`:`Oi ${a.nome.split(" ")[0]}!`;
+  const t=r&&turma(r.turmaId);const msg=r&&t?tpl("confirmacao",{nome:a.nome.split(" ")[0],aula:t.nome,dia:relD(r.data),hora:t.hora}):`Oi ${a.nome.split(" ")[0]}!`;
   return "https://wa.me/"+d+"?text="+encodeURIComponent(msg)}
 const STATUS={agendado:["Agendado","p-acc"],confirmado:["Agendado","p-acc"],presente:["Presente","p-acc"],falta:["Faltou","p-bad"],desmarcado:["Desmarcou","p-neutral"],ferias:["Férias","p-neutral"]};
 function pill(st){const s=STATUS[st]||[st,"p-neutral"];return `<span class="pill ${s[1]}"><span class="dot"></span>${s[0]}</span>`}
@@ -799,26 +799,26 @@ function vContatar(){
   if(V.length){h+=`<div class="stack"><div class="row between"><h2>Vaga liberada</h2><span class="sub">Alunos na lista de espera de um horário que abriu</span></div>`;
     for(const e of V){const a=aluno(e.alunoId),t=turma(e.turmaId);const L=livres(t.id,e.data);
       h+=`<div class="card"><div class="row between"><div class="grow"><div class="name">${esc(a.nome)}</div><div class="meta">${esc(t.nome)} · ${relD(e.data)} às ${esc(t.hora)}</div></div><span class="pill ${L>0?"p-ok":"p-neutral"}">${L>0?L+(L===1?" vaga livre":" vagas livres"):"Vaga já preenchida"}</span></div>
-      ${contatoBtns(a,`Oi ${a.nome.split(" ")[0]}! Abriu uma vaga na aula de ${t.nome} ${relD(e.data)} às ${t.hora}, o horário que você queria. Quer que eu reserve para você?`)}
+      ${contatoBtns(a,tpl("vaga",{nome:a.nome.split(" ")[0],aula:t.nome,dia:relD(e.data),hora:t.hora}))}
       <div class="row">${L>0?`<button class="small" data-act="pegarVaga" data-id="${e.id}">Agendar para ele(a)</button>`:""}<button class="small ghost" data-act="esperaContatado" data-id="${e.id}">Já avisei</button></div></div>`}
     h+=`</div>`}
   const RV=renovacoes();
   if(RV.length){h+=`<div class="stack"><div class="row between"><h2>Pagamentos e renovações</h2><span class="sub">Vencendo nos próximos dias ou vencidos</span></div><div class="card"><div class="list">`;
     for(const x of RV){const a=x.a,p=planoDe(a);const quando=x.n<0?`venceu há ${-x.n} ${-x.n===1?"dia":"dias"}`:x.n===0?"vence hoje":x.n===1?"vence amanhã":`vence em ${x.n} dias`;
-      const msg=x.tipo==="renov"?`Oi ${a.nome.split(" ")[0]}! Seu ${p?p.nome:"plano"} ${x.n<0?"venceu":"vence"} em ${fmtFull(a.fim)}. Vamos renovar?`:`Oi ${a.nome.split(" ")[0]}! Passando para lembrar que o pagamento do seu ${p?p.nome:"plano"} vence em ${fmtFull(x.data)}${a.forma?" ("+a.forma+")":""}.`;
+      const msg=x.tipo==="renov"?tpl("renovacao",{nome:a.nome.split(" ")[0],plano:p?p.nome:"plano",vence:x.n<0?"venceu":"vence",data:fmtFull(a.fim)}):tpl("pagamento",{nome:a.nome.split(" ")[0],plano:p?p.nome:"plano",data:fmtFull(x.data),forma:a.forma||""});
       h+=`<div class="item"><div class="grow"><div class="name">${esc(a.nome)}</div><div class="meta">${x.tipo==="renov"?"Renovação do plano":"Mensalidade"} · ${quando}${p?" · "+esc(p.nome):""}</div></div><span class="pill ${x.n<0?"p-bad":"p-wait"}">${x.tipo==="renov"?"Renovar":"Pagamento"}</span><div class="row">${contatoBtns(a,msg)}<button class="small ghost" data-act="${x.tipo==="renov"?"renovAvisado":"pagAvisado"}" data-id="${a.id}" data-v="${x.tipo==="renov"?a.fim:x.data}">Avisei</button></div></div>`}
     h+=`</div></div></div>`}
   const N=aniversariantes();
   h+=`<div class="stack"><div class="row between"><h2>Aniversários</h2><span class="sub">Hoje e próximos 7 dias</span></div>`;
   if(!N.length)h+=`<div class="card empty">Nenhum aniversário nos próximos 7 dias.${S.alunos.some(a=>a.nascimento)?"":" Cadastre a data de nascimento em cada aluno para aparecer aqui."}</div>`;
   else{h+=`<div class="card"><div class="list">`;for(const {a,dias} of N){const [,m,d]=a.nascimento.split("-");
-    h+=`<div class="item"><div class="grow"><div class="name">${esc(a.nome)}</div><div class="meta">${d}/${m} · ${dias===0?"é hoje":dias===1?"amanhã":"em "+dias+" dias"}</div></div>${dias===0?`<div class="row">${contatoBtns(a,`Feliz aniversário, ${a.nome.split(" ")[0]}! 🎉 Toda a equipe ${S.regras.nome?"do "+S.regras.nome+" ":""}deseja um ano incrível, com muita saúde e movimento. Um abraço!`)}<button class="small ghost" data-act="parabens" data-id="${a.id}">Enviei</button></div>`:`<span class="pill p-neutral">${dias===1?"Amanhã":"Em breve"}</span>`}</div>`}
+    h+=`<div class="item"><div class="grow"><div class="name">${esc(a.nome)}</div><div class="meta">${d}/${m} · ${dias===0?"é hoje":dias===1?"amanhã":"em "+dias+" dias"}</div></div>${dias===0?`<div class="row">${contatoBtns(a,tpl("aniversario",{nome:a.nome.split(" ")[0]}))}<button class="small ghost" data-act="parabens" data-id="${a.id}">Enviei</button></div>`:`<span class="pill p-neutral">${dias===1?"Amanhã":"Em breve"}</span>`}</div>`}
     h+=`</div></div>`}
   h+=`</div>`;
   const AS=anivStudioSemana();
   if(AS.length){h+=`<div class="stack"><div class="row between"><h2>Aniversário de studio</h2><span class="sub">Tempo de casa, hoje e próximos 7 dias</span></div><div class="card"><div class="list">`;
     for(const {a,x} of AS){const nm=a.nome.split(" ")[0];
-      h+=`<div class="item"><div class="grow"><div class="name">${esc(a.nome)}</div><div class="meta">${x.anos} ${x.anos===1?"ano":"anos"} de ${esc(S.regras.nome||"studio")} · ${fmtFull(x.data).slice(0,5)} · ${x.dias===0?"é hoje":x.dias===1?"amanhã":"em "+x.dias+" dias"}</div></div>${x.dias===0?`<div class="row">${contatoBtns(a,`Oi ${nm}! Hoje faz ${x.anos} ${x.anos===1?"ano":"anos"} que você treina com a gente 🎉 Obrigado pela confiança e por fazer parte ${S.regras.nome?"do "+S.regras.nome:"da nossa família"}. Bora pra mais um ano!`)}<button class="small ghost" data-act="parabensStudio" data-id="${a.id}">Enviei</button></div>`:`<span class="pill p-neutral">${x.dias===1?"Amanhã":"Em breve"}</span>`}</div>`}
+      h+=`<div class="item"><div class="grow"><div class="name">${esc(a.nome)}</div><div class="meta">${x.anos} ${x.anos===1?"ano":"anos"} de ${esc(S.regras.nome||"studio")} · ${fmtFull(x.data).slice(0,5)} · ${x.dias===0?"é hoje":x.dias===1?"amanhã":"em "+x.dias+" dias"}</div></div>${x.dias===0?`<div class="row">${contatoBtns(a,tpl("tempoCasa",{nome:nm,anos:x.anos+(x.anos===1?" ano":" anos")}))}<button class="small ghost" data-act="parabensStudio" data-id="${a.id}">Enviei</button></div>`:`<span class="pill p-neutral">${x.dias===1?"Amanhã":"Em breve"}</span>`}</div>`}
     h+=`</div></div></div>`}
   return h}
 
@@ -1136,7 +1136,7 @@ function vComunicacao(){
       h+=`<div class="card" ${m.tipo==="desconforto"&&m.intensidade==="forte"&&m.status==="novo"?'style="border-color:var(--bad)"':""}><div class="row between"><div class="grow"><div class="eyebrow">${m.tipo==="desconforto"?"Desconforto após treino":"Sugestão"}</div><div class="name">${esc(a.nome)}</div><div class="meta">${quando(m.criadoEm)}${t?` · ${esc(t.nome)} ${relD(r.data)} ${esc(t.hora)}${t.professor?" · Prof. "+esc(t.professor):""}`:""}</div></div>${stPill(MSG_ST,m.status)}</div>
       ${m.tipo==="desconforto"?`<div class="row"><span class="pill ${m.intensidade==="forte"?"p-bad":m.intensidade==="moderado"?"p-wait":"p-neutral"}">${esc(m.intensidade||"")}</span><span class="pill p-neutral">${esc(m.local||"")}</span></div>`:""}
       <div style="white-space:pre-line">${esc(m.texto)}</div>${fotosHtml(m.fotos)}${m.resposta?`<div class="note"><b>Resposta enviada:</b> ${esc(m.resposta)}</div>`:""}
-      <form class="stack" data-form="responder" data-id="${m.id}"><div class="formgrid"><label>Responder ao aluno<input id="rp_${m.id}" placeholder="Ex.: Vamos adaptar o agachamento na próxima aula"></label><label>Quem responde<input id="rpq_${m.id}" placeholder="Nome do professor" value="${esc(t&&t.professor||"")}"></label></div><div class="row"><button class="small primary">Responder</button>${m.status==="novo"?`<button type="button" class="small" data-act="msgVista" data-id="${m.id}">Marcar como vista</button>`:""}${a.telefone?contatoBtns(a,`Oi ${a.nome.split(" ")[0]}! Recebemos sua mensagem pelo app.`):""}</div></form></div>`}
+      <form class="stack" data-form="responder" data-id="${m.id}"><div class="formgrid"><label>Responder ao aluno<input id="rp_${m.id}" placeholder="Ex.: Vamos adaptar o agachamento na próxima aula"></label><label>Quem responde<input id="rpq_${m.id}" placeholder="Nome do professor" value="${esc(t&&t.professor||"")}"></label></div><div class="row"><button class="small primary">Responder</button>${m.status==="novo"?`<button type="button" class="small" data-act="msgVista" data-id="${m.id}">Marcar como vista</button>`:""}${a.telefone?contatoBtns(a,tpl("respostaApp",{nome:a.nome.split(" ")[0]})):""}</div></form></div>`}
     return h+`</div>`}
   if(S.subCom==="avisos"){
     h+=`<div class="card"><h2>Novo aviso</h2><form class="stack" data-form="novoAviso"><label>Título<input id="av_t" required placeholder="Ex.: Estúdio fechado no feriado"></label><label>Mensagem${ta("av_x","Detalhes do aviso",false)}</label><div class="formgrid"><label>Mostrar até (opcional)<input type="date" id="av_ate"></label></div><div class="days"><label><input type="checkbox" id="av_imp">Marcar como importante</label></div><div><button class="primary small">Publicar aviso</button></div></form></div>`;
@@ -1201,6 +1201,7 @@ document.addEventListener("submit",e=>{
 function vAjustes(){
   const r=S.regras;
   let h=`<div class="card"><h2>Regras</h2><form class="formgrid" data-form="regras"><label>Nome do estúdio<input id="rg_nome" value="${esc(r.nome||"")}" placeholder="Seu estúdio"></label><label>Desmarcar com crédito até (minutos antes)<input id="rg_desm" type="number" min="0" step="5" value="${minDesm()}"></label><label>Gerar horários fixos para os próximos (dias)<input id="rg_dfx" type="number" min="1" max="60" value="${diasFixos()}"></label><div class="days" style="grid-column:1/-1"><label><input type="checkbox" id="rg_auto" ${autoOn()?"checked":""}>Gerar as aulas dos horários fixos automaticamente</label></div><div style="display:flex;align-items:end"><button class="primary" style="width:100%">Salvar regras</button></div></form></div>`;
+  if(ROLE==="admin")h+=cardMensagensAuto();
   h+=cardAcessos();
   h+=cardModeloContrato();
   const C=S.cfg;
@@ -1639,7 +1640,7 @@ function vMensalidadesLista(m,R){
   if(profs.length)h+=`<label>Professor<select id="finProfF" data-change="finProfF"><option value="">Todos</option>${profs.map(p=>`<option ${S.finProfF===p?"selected":""}>${esc(p)}</option>`).join("")}</select></label>`;
   if(S.finFiltro==="renovacao"){const RL=renovFin().filter(a=>!S.finProfF||String(a.profFin||"").trim()===S.finProfF);
     return h+`<div class="card"><h3>Planos para renovar</h3><div class="meta">Vencem em até ${diasRenov()} dias ou venceram há pouco.</div><div class="list">${RL.map(a=>{const n=diasAte(a.fim);const p=planoDe(a);const nm=p?p.nome:(a.planoPlanilha||"plano");
-      return `<div class="item"><div class="grow"><div class="name">${esc(a.nome)}</div><div class="meta">${esc(nm)}${PERIODOS[a.periodo]?" · "+PERIODOS[a.periodo][0].toLowerCase():""} · fim ${fmtFull(a.fim)}${a.valor?" · "+brl(a.valor):""}</div></div><span class="pill ${n<0?"p-bad":"p-wait"}">${n<0?`Venceu há ${-n} ${-n===1?"dia":"dias"}`:n===0?"Vence hoje":`Renovar em ${n} ${n===1?"dia":"dias"}`}</span>${telDe(a)?`<a class="btn small primary" href="${esc(waMsg(a,`Oi ${a.nome.split(" ")[0]}! Seu ${nm} ${n<0?"venceu":"vence"} em ${fmtFull(a.fim)}. Vamos renovar?`))}" target="_blank" rel="noopener">WhatsApp</a>`:""}<button class="small" data-act="abrirAluno" data-id="${a.id}">Abrir</button></div>`}).join("")||`<div class="item meta">Nenhum plano para renovar.</div>`}</div></div>`}
+      return `<div class="item"><div class="grow"><div class="name">${esc(a.nome)}</div><div class="meta">${esc(nm)}${PERIODOS[a.periodo]?" · "+PERIODOS[a.periodo][0].toLowerCase():""} · fim ${fmtFull(a.fim)}${a.valor?" · "+brl(a.valor):""}</div></div><span class="pill ${n<0?"p-bad":"p-wait"}">${n<0?`Venceu há ${-n} ${-n===1?"dia":"dias"}`:n===0?"Vence hoje":`Renovar em ${n} ${n===1?"dia":"dias"}`}</span>${telDe(a)?`<a class="btn small primary" href="${esc(waMsg(a,tpl("renovacao",{nome:a.nome.split(" ")[0],plano:nm,vence:n<0?"venceu":"vence",data:fmtFull(a.fim)})))}" target="_blank" rel="noopener">WhatsApp</a>`:""}<button class="small" data-act="abrirAluno" data-id="${a.id}">Abrir</button></div>`}).join("")||`<div class="item meta">Nenhum plano para renovar.</div>`}</div></div>`}
   const L=R.cb.filter(x=>(S.finFiltro==="todos"||x.st===S.finFiltro||(S.finFiltro==="pendente"&&x.st==="atrasado"))&&(!S.finProfF||x.prof===S.finProfF));
   if(!R.cb.length)return h+`<div class="card empty">Nenhuma mensalidade neste mês. Cadastre plano, valor e dia de pagamento nos alunos.</div>`;
   for(const f of FAIXAS){const G=L.filter(x=>x.faixa===f);if(!G.length)continue;
@@ -1647,7 +1648,7 @@ function vMensalidadesLista(m,R){
     for(const x of G){const a=x.a,p=planoDe(a);
       h+=`<div class="item"><div class="row grow" style="gap:10px;flex-wrap:nowrap">${avatar(a,36)}<div style="min-width:0"><div class="name">${esc(a.nome)}</div><div class="meta">${esc(p?p.nome:(a.planoPlanilha||"Plano"))}${x.prof?" · "+esc(x.prof):""} · vence ${fmtFull(x.venc)}${a.forma?" · "+esc(a.forma):""}${a.obsFin?" · "+esc(a.obsFin):""}${x.pg?` · pago ${fmtFull(String(x.pg.pagoEm).slice(0,10))}${x.pg.forma?" ("+esc(x.pg.forma)+")":""}`:""}</div></div></div>
       <span class="num" style="font-weight:600">${brl(x.pg?Number(x.pg.valor):x.valor)}</span>${x.st==="pago"?`<span class="pill p-ok">Pago</span>`:x.st==="atrasado"?`<span class="pill p-bad">Em atraso</span>`:`<span class="pill p-wait">A pagar</span>`}
-      <div class="row">${x.pg?`<button class="small ghost" data-act="pgDesfazer" data-id="${x.pg.id}">Desfazer</button>`:`<button class="small primary" data-act="pgAbrir" data-id="${a.id}" data-v="${m}">Registrar pagamento</button>${x.st==="atrasado"&&telDe(a)?`<a class="btn small" href="${esc(waMsg(a,`Oi ${a.nome.split(" ")[0]}! Tudo bem? Passando para lembrar da mensalidade de ${nomeMes(m).toLowerCase()} (${brl(x.valor)}), que venceu em ${fmtFull(x.venc)}. Qualquer dúvida, estou à disposição!`))}" target="_blank" rel="noopener">Cobrar</a>`:""}`}</div></div>`}
+      <div class="row">${x.pg?`<button class="small ghost" data-act="pgDesfazer" data-id="${x.pg.id}">Desfazer</button>`:`<button class="small primary" data-act="pgAbrir" data-id="${a.id}" data-v="${m}">Registrar pagamento</button>${x.st==="atrasado"&&telDe(a)?`<a class="btn small" href="${esc(waMsg(a,tpl("cobranca",{nome:a.nome.split(" ")[0],mes:nomeMes(m).toLowerCase(),valor:brl(x.valor),data:fmtFull(x.venc)})))}" target="_blank" rel="noopener">Cobrar</a>`:""}`}</div></div>`}
     h+=`</div></div>`}
   if(!L.length)h+=`<div class="card empty">Nada neste filtro.</div>`;
   return h}
@@ -2208,8 +2209,35 @@ document.addEventListener("click",e=>{const b=e.target.closest('[data-act="vagaE
 S.acessos=null;S.convites=null;S.codigoNovo=null;
 async function carregarAcessos(){if(ROLE!=="admin")return;try{const [a,c]=await Promise.all([SMCT.rpc("listar_acessos"),SB.from("smct_convites").select("*").is("usado_por",null).order("criado_em",{ascending:false})]);
   if(c.error)throw c.error;S.acessos=a||[];S.convites=c.data||[];render()}catch(e){console.error(e);S.acessos=S.acessos||[];S.convites=S.convites||[];toast("Não foi possível carregar os acessos")}}
+/* ---------- mensagens automáticas (editáveis em Ajustes) ---------- */
+const MSG_PADRAO=[
+  ["confirmacao","Confirmação de aula","Oi {nome}! Tudo bem? Você vem na aula de {aula} {dia} às {hora}?",["nome","aula","dia","hora"]],
+  ["vaga","Vaga na lista de espera","Oi {nome}! Abriu uma vaga na aula de {aula} {dia} às {hora}, o horário que você queria. Quer que eu reserve para você?",["nome","aula","dia","hora"]],
+  ["renovacao","Renovação de plano","Oi {nome}! Seu {plano} {vence} em {data}. Vamos renovar?",["nome","plano","vence","data"]],
+  ["pagamento","Lembrete de pagamento","Oi {nome}! Passando para lembrar que o pagamento do seu {plano} vence em {data}.",["nome","plano","data","forma"]],
+  ["cobranca","Cobrança de mensalidade atrasada","Oi {nome}! Tudo bem? Passando para lembrar da mensalidade de {mes} ({valor}), que venceu em {data}. Qualquer dúvida, estou à disposição!",["nome","mes","valor","data"]],
+  ["aniversario","Aniversário","Feliz aniversário, {nome}! 🎉 Toda a equipe do {estudio} deseja um ano incrível, com muita saúde e movimento. Um abraço!",["nome","estudio"]],
+  ["tempoCasa","Aniversário de estúdio","Oi {nome}! Hoje faz {anos} que você treina com a gente 🎉 Obrigado pela confiança e por fazer parte do {estudio}. Bora pra mais um ano!",["nome","anos","estudio"]],
+  ["respostaApp","Resposta a mensagem do app","Oi {nome}! Recebemos sua mensagem pelo app.",["nome","estudio"]],
+  ["convite","Convite de acesso ao app","Oi {nome}! Seu acesso ao app do {estudio}: abra {link} , toque em \"Criar conta\", use seu e-mail e uma senha, e digite o código {codigo}.",["nome","estudio","link","codigo"]]
+];
+const MSG_VAR={nome:"primeiro nome do aluno",aula:"nome da aula",dia:"hoje, amanhã ou a data",hora:"horário",plano:"nome do plano",vence:"\"vence\" ou \"venceu\"",data:"data",forma:"forma de pagamento",mes:"mês",valor:"valor em R$",anos:"ex.: 2 anos",estudio:"nome do estúdio",link:"link do app",codigo:"código de acesso"};
+function tpl(k,vars){const d=MSG_PADRAO.find(x=>x[0]===k);const own=S.msgs&&typeof S.msgs[k]==="string"&&S.msgs[k].trim()?S.msgs[k]:null;
+  const t=own||(d?d[2]:"");const V=Object.assign({estudio:S.regras.nome||"SM|CT"},vars||{});
+  return t.replace(/\{(\w+)\}/g,(m,n)=>n in V?String(V[n]??""):m).replace(/[ \t]+!/g,"!").replace(/[ \t]{2,}/g," ").trim()}
+function cardMensagensAuto(){
+  const ex={nome:"Ana",aula:"Pilates",dia:"amanhã",hora:"07:00",plano:"Black",vence:"vence",data:"20/11/2026",forma:"Pix",mes:"novembro",valor:"R$ 250,00",anos:"2 anos",link:"smct-liard.vercel.app",codigo:"AB12CD"};
+  let h=`<details class="card" data-keep="msgAuto" ${aberto("msgAuto")}><summary><h2 style="display:inline">Mensagens automáticas</h2></summary><div class="meta" style="margin:6px 0 12px">Textos que o app coloca pronto no WhatsApp. As palavras entre chaves, como <b>{nome}</b>, são trocadas automaticamente. Deixe em branco para usar o texto padrão.</div><form class="stack" data-form="msgAuto">`;
+  for(const [k,tit,pad,vs] of MSG_PADRAO){const cur=(S.msgs&&S.msgs[k])||"";
+    h+=`<div style="display:grid;gap:6px;padding:10px 0;border-top:1px solid var(--line)"><label style="display:grid;gap:6px"><b>${esc(tit)}</b><textarea id="ma_${k}" rows="3" placeholder="${esc(pad)}" style="font:15px var(--f-body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px;width:100%;resize:vertical">${esc(cur)}</textarea></label><div class="meta">Pode usar: ${vs.map(n=>`<b>{${n}}</b> (${esc(MSG_VAR[n]||n)})`).join(" · ")}</div><div class="meta">Exemplo: ${esc(tpl(k,ex))}</div>${cur?`<div><button type="button" class="small ghost" data-act="msgPadrao" data-v="${k}">Voltar ao padrão</button></div>`:""}</div>`}
+  return h+`<button class="primary">Salvar mensagens</button></form></details>`}
+document.addEventListener("submit",e=>{const f=e.target.closest('[data-form="msgAuto"]');if(!f||!db)return;e.preventDefault();if(ROLE!=="admin"){toast("Só a administração pode editar");return}
+  const o={};for(const [k] of MSG_PADRAO){const el=document.getElementById("ma_"+k);const t=el?el.value.trim():"";if(t)o[k]=t}
+  run(async()=>{await db.doc("config/mensagens").set(Object.assign({atualizadoEm:new Date().toISOString()},o));S.msgs=o},"Mensagens salvas")});
+document.addEventListener("click",e=>{const b=e.target.closest('[data-act="msgPadrao"]');if(!b||!db||ROLE!=="admin")return;const k=b.dataset.v;const el=document.getElementById("ma_"+k);if(el)el.value="";
+  const o=Object.assign({},S.msgs||{});delete o[k];delete o.atualizadoEm;run(async()=>{await db.doc("config/mensagens").set(Object.assign({atualizadoEm:new Date().toISOString()},o));S.msgs=o},"Voltou ao texto padrão")});
 function linkApp(){return location.origin+location.pathname}
-function msgConvite(cv){const nome=(cv.nome||"").split(" ")[0];return `Oi${nome?" "+nome:""}! Seu acesso ao app do ${S.regras.nome||"SM|CT"}: abra ${linkApp()} , toque em "Criar conta", use seu e-mail e uma senha, e digite o código ${cv.codigo}.`}
+function msgConvite(cv){const nome=(cv.nome||"").split(" ")[0];return tpl("convite",{nome,link:linkApp(),codigo:cv.codigo})}
 function cardAcessos(){
   if(S.acessos===null){setTimeout(carregarAcessos,0);return `<div class="card"><h2>Acessos</h2><div class="meta">Carregando…</div></div>`}
   const PAP={admin:"Administração",professor:"Professor",vendedor:"Vendedor",aluno:"Aluno"};
@@ -2292,6 +2320,7 @@ render();
   db.doc("config/contrato").onSnapshot(s=>{S.contratoModelo=s.exists?s.data():null;render()},fail);
   window.claude.use("downloads").then(x=>{downloadsNs=x;render()},()=>{});
   db.doc("config/planos").onSnapshot(s=>{if(s.exists){const d=s.data();S.cfg={modalidades:Array.isArray(d.modalidades)?d.modalidades:[],planos:Array.isArray(d.planos)?d.planos:[],cores:d.cores&&typeof d.cores==="object"?d.cores:{}}}render()},fail);
+  db.doc("config/mensagens").onSnapshot(s=>{S.msgs=s.exists?s.data():{};render()},()=>{S.msgs={}});
   db.doc("config/regras").onSnapshot(s=>{if(s.exists)S.regras=Object.assign({minutosDesmarcar:30,nome:""},s.data());S.regrasOk=true;render();setTimeout(()=>autoFixos(),1500)},fail);
   setInterval(()=>autoFixos(),10*60e3);
   if(ROLE==="aluno"){carregarOcupacao();carregarQuem();setInterval(()=>{carregarOcupacao();carregarQuem()},60000)}
